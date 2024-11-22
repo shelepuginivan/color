@@ -61,5 +61,5 @@ func NewFromHex(hex string) (*Color, error) {
 }
 
 func (c Color) Hex() string {
-	return fmt.Sprintf("#%x%x%x", c.R, c.G, c.B)
+	return fmt.Sprintf("#%02x%02x%02x", c.R, c.G, c.B)
 }
