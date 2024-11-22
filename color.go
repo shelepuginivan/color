@@ -63,3 +63,7 @@ func NewFromHex(hex string) (*Color, error) {
 func (c Color) Hex() string {
 	return fmt.Sprintf("#%02x%02x%02x", c.R, c.G, c.B)
 }
+
+func (c Color) RGB() string {
+	return fmt.Sprintf("rgb(%d, %d, %d)", c.R, c.G, c.B)
+}
