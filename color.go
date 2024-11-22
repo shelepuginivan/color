@@ -60,10 +60,12 @@ func NewFromHex(hex string) (*Color, error) {
 	return &Color{uint8(r), uint8(g), uint8(b)}, nil
 }
 
+// Hex returns hexadecimal representation of color.
 func (c Color) Hex() string {
 	return fmt.Sprintf("#%02x%02x%02x", c.R, c.G, c.B)
 }
 
+// RGB returns CSS `rgb` function (e.g. `rgb(255, 0, 0)`)
 func (c Color) RGB() string {
 	return fmt.Sprintf("rgb(%d, %d, %d)", c.R, c.G, c.B)
 }
