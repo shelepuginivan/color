@@ -6,6 +6,9 @@ import (
 	"strconv"
 )
 
+// Percent convertation constant.
+const percent = 100
+
 // Color represents a color.
 type Color struct {
 	R uint8 // Red.
@@ -13,10 +16,19 @@ type Color struct {
 	B uint8 // Blue.
 }
 
+// HSL representation of color.
 type HSL struct {
 	Hue        int // Hue (degrees).
 	Saturation int // Saturation (percent).
 	Lightness  int // Lightness (percent).
+}
+
+// CMYK representation of color.
+type CMYK struct {
+	C int // Cyan (percent).
+	M int // Magenta (percent).
+	Y int // Yellow (percent).
+	K int // Black key (percent).
 }
 
 // New returns a new instance of [Color].
@@ -67,6 +79,23 @@ func NewFromHex(hex string) (*Color, error) {
 	return &Color{uint8(r), uint8(g), uint8(b)}, nil
 }
 
+func NewFromCMYK(cyan, magenta, yellow, key int) *Color {
+	c := float64(cyan) / 100
+	m := float64(magenta) / 100
+	y := float64(yellow) / 100
+	k := float64(key) / 100
+
+	r := 255 * (1 - c) * (1 - k)
+	g := 255 * (1 - m) * (1 - k)
+	b := 255 * (1 - y) * (1 - k)
+
+	return &Color{
+		R: uint8(math.Round(r)),
+		G: uint8(math.Round(g)),
+		B: uint8(math.Round(b)),
+	}
+}
+
 // NewFromHSL returns a new instance of [Color] by converting HSL to RGB.
 func NewFromHSL(hue, saturation, lightness int) *Color {
 	h := float64(hue) / 360
@@ -100,7 +129,37 @@ func (c Color) Hex() string {
 	return fmt.Sprintf("#%02x%02x%02x", c.R, c.G, c.B)
 }
 
-// HSL converts color to HSL (hue, saturation, lightness).
+// CMYK returns [CMYK] representation of color (cyan, magenta, yellow, key).
+func (c Color) CMYK() *CMYK {
+	r := float64(c.R) / 255
+	g := float64(c.G) / 255
+	b := float64(c.B) / 255
+
+	key := 1 - max(r, g, b)
+	d := 1 - key
+
+	// The default case is when key equals 1, i.e. the color is black.
+	var (
+		cyan    = 0.0
+		magenta = 0.0
+		yellow  = 0.0
+	)
+
+	if d != 0 {
+		cyan = (d - r) / d
+		magenta = (d - g) / d
+		yellow = (d - b) / d
+	}
+
+	return &CMYK{
+		C: int(math.Round(cyan * 100)),
+		M: int(math.Round(magenta * 100)),
+		Y: int(math.Round(yellow * 100)),
+		K: int(math.Round(key * 100)),
+	}
+}
+
+// HSL returns [HSL] representation of color (hue, saturation, lightness).
 func (c Color) HSL() *HSL {
 	r := float64(c.R) / 255
 	g := float64(c.G) / 255

@@ -144,6 +144,27 @@ func TestColor_Hex(t *testing.T) {
 	}
 }
 
+func TestColor_CMYK(t *testing.T) {
+	cases := []struct {
+		color    *color.Color
+		expected *color.CMYK
+	}{
+		{color: &color.Color{0, 0, 0}, expected: &color.CMYK{0, 0, 0, 100}},
+		{color: &color.Color{255, 255, 255}, expected: &color.CMYK{0, 0, 0, 0}},
+		{color: &color.Color{255, 0, 0}, expected: &color.CMYK{0, 100, 100, 0}},
+		{color: &color.Color{0, 255, 0}, expected: &color.CMYK{100, 0, 100, 0}},
+		{color: &color.Color{0, 0, 255}, expected: &color.CMYK{100, 100, 0, 0}},
+		{color: &color.Color{255, 255, 0}, expected: &color.CMYK{0, 0, 100, 0}},
+		{color: &color.Color{255, 0, 255}, expected: &color.CMYK{0, 100, 0, 0}},
+		{color: &color.Color{0, 255, 255}, expected: &color.CMYK{100, 0, 0, 0}},
+	}
+
+	for _, c := range cases {
+		actual := c.color.CMYK()
+		assert.EqualExportedValues(t, c.expected, actual)
+	}
+}
+
 func TestColor_HSL(t *testing.T) {
 	cases := []struct {
 		color    *color.Color
