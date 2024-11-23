@@ -95,6 +95,28 @@ func TestNewFromHex(t *testing.T) {
 	}
 }
 
+func TestNewFromHSL(t *testing.T) {
+	cases := []struct {
+		hue, saturation, lightness int
+		expected                   *color.Color
+	}{
+		{0, 100, 50, &color.Color{255, 0, 0}},
+		{120, 100, 50, &color.Color{0, 255, 0}},
+		{240, 100, 50, &color.Color{0, 0, 255}},
+		{60, 100, 50, &color.Color{255, 255, 0}},
+		{180, 100, 50, &color.Color{0, 255, 255}},
+		{300, 100, 50, &color.Color{255, 0, 255}},
+		{0, 0, 50, &color.Color{128, 128, 128}},
+		{0, 0, 0, &color.Color{0, 0, 0}},
+		{0, 0, 100, &color.Color{255, 255, 255}},
+	}
+
+	for _, c := range cases {
+		actual := color.NewFromHSL(c.hue, c.saturation, c.lightness)
+		assert.Equal(t, c.expected, actual)
+	}
+}
+
 func TestColor_Hex(t *testing.T) {
 	cases := []struct {
 		color    *color.Color
@@ -119,5 +141,41 @@ func TestColor_Hex(t *testing.T) {
 		expected := fmt.Sprintf("#%02x%02x%02x", r, g, b)
 		actual := color.Color{uint8(r), uint8(g), uint8(b)}.Hex()
 		assert.Equal(t, expected, actual)
+	}
+}
+
+func TestColor_HSL(t *testing.T) {
+	cases := []struct {
+		color    *color.Color
+		expected *color.HSL
+	}{
+		{color: &color.Color{255, 0, 0}, expected: &color.HSL{0, 100, 50}},
+		{color: &color.Color{0, 255, 0}, expected: &color.HSL{120, 100, 50}},
+		{color: &color.Color{0, 0, 255}, expected: &color.HSL{240, 100, 50}},
+		{color: &color.Color{255, 255, 0}, expected: &color.HSL{60, 100, 50}},
+		{color: &color.Color{0, 255, 255}, expected: &color.HSL{180, 100, 50}},
+		{color: &color.Color{255, 0, 255}, expected: &color.HSL{300, 100, 50}},
+		{color: &color.Color{128, 128, 128}, expected: &color.HSL{0, 0, 50}},
+		{color: &color.Color{0, 0, 0}, expected: &color.HSL{0, 0, 0}},
+		{color: &color.Color{255, 255, 255}, expected: &color.HSL{0, 0, 100}},
+		{color: &color.Color{184, 201, 221}, expected: &color.HSL{212, 35, 79}},
+	}
+
+	for _, c := range cases {
+		actual := c.color.HSL()
+		assert.Equal(t, c.expected, actual)
+	}
+
+	// Random tests.
+	for range 1000 {
+		r := rand.Intn(256)
+		g := rand.Intn(256)
+		b := rand.Intn(256)
+		color := color.Color{uint8(r), uint8(g), uint8(b)}
+		hsl := color.HSL()
+
+		assert.True(t, hsl.Hue >= 0 && hsl.Hue < 360)
+		assert.True(t, hsl.Saturation >= 0 && hsl.Saturation <= 100)
+		assert.True(t, hsl.Lightness >= 0 && hsl.Lightness <= 100)
 	}
 }

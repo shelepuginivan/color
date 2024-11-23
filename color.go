@@ -93,7 +93,6 @@ func NewFromHSL(hue, saturation, lightness int) *Color {
 		G: uint8(math.Round(g * 255)),
 		B: uint8(math.Round(b * 255)),
 	}
-
 }
 
 // Hex returns hexadecimal representation of color.
