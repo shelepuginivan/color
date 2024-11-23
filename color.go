@@ -79,7 +79,20 @@ func NewFromHex(hex string) (*Color, error) {
 	return &Color{uint8(r), uint8(g), uint8(b)}, nil
 }
 
-func NewFromCMYK(cyan, magenta, yellow, key int) *Color {
+func NewFromCMYK(cyan, magenta, yellow, key int) (*Color, error) {
+	validity := [...]error{
+		isPercent(cyan, "cyan"),
+		isPercent(magenta, "magenta"),
+		isPercent(yellow, "yellow"),
+		isPercent(key, "key"),
+	}
+
+	for _, err := range validity {
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	c := float64(cyan) / 100
 	m := float64(magenta) / 100
 	y := float64(yellow) / 100
@@ -93,16 +106,33 @@ func NewFromCMYK(cyan, magenta, yellow, key int) *Color {
 		R: uint8(math.Round(r)),
 		G: uint8(math.Round(g)),
 		B: uint8(math.Round(b)),
-	}
+	}, nil
 }
 
 // NewFromHSL returns a new instance of [Color] by converting HSL to RGB.
-func NewFromHSL(hue, saturation, lightness int) *Color {
+func NewFromHSL(hue, saturation, lightness int) (*Color, error) {
+	validity := [...]error{
+		isDegree(hue, "hue"),
+		isPercent(saturation, "saturation"),
+		isPercent(lightness, "lightness"),
+	}
+
+	for _, err := range validity {
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	h := float64(hue) / 360
 	s := float64(saturation) / 100
 	l := float64(lightness) / 100
 
-	var r, g, b = l, l, l // The default case is when the color is achromatic.
+	// The default case is when the color is achromatic.
+	var (
+		r = l
+		g = l
+		b = l
+	)
 
 	if s != 0 {
 		var q float64
@@ -121,7 +151,7 @@ func NewFromHSL(hue, saturation, lightness int) *Color {
 		R: uint8(math.Round(r * 255)),
 		G: uint8(math.Round(g * 255)),
 		B: uint8(math.Round(b * 255)),
-	}
+	}, nil
 }
 
 // Hex returns hexadecimal representation of color.
@@ -219,4 +249,20 @@ func hueToRGB(p, q, t float64) float64 {
 		return p + (q-p)*(2.0/3-t)*6
 	}
 	return p
+}
+
+// isPercent validates value in percents.
+func isPercent(p int, argname string) error {
+	if p < 0 || p > 100 {
+		return fmt.Errorf("%s must be a valid value in percents (integer in range [0, 100]), got %d", argname, p)
+	}
+	return nil
+}
+
+// isDegree validates value in degrees.
+func isDegree(d int, argname string) error {
+	if d < 0 || d > 360 {
+		return fmt.Errorf("%s must be a valid value in degress (integer in range [0, 360]), got %d", argname, d)
+	}
+	return nil
 }

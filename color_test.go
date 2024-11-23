@@ -99,21 +99,30 @@ func TestNewFromHSL(t *testing.T) {
 	cases := []struct {
 		hue, saturation, lightness int
 		expected                   *color.Color
+		err                        bool
 	}{
-		{0, 100, 50, &color.Color{255, 0, 0}},
-		{120, 100, 50, &color.Color{0, 255, 0}},
-		{240, 100, 50, &color.Color{0, 0, 255}},
-		{60, 100, 50, &color.Color{255, 255, 0}},
-		{180, 100, 50, &color.Color{0, 255, 255}},
-		{300, 100, 50, &color.Color{255, 0, 255}},
-		{0, 0, 50, &color.Color{128, 128, 128}},
-		{0, 0, 0, &color.Color{0, 0, 0}},
-		{0, 0, 100, &color.Color{255, 255, 255}},
+		{0, 100, 50, &color.Color{255, 0, 0}, false},
+		{120, 100, 50, &color.Color{0, 255, 0}, false},
+		{240, 100, 50, &color.Color{0, 0, 255}, false},
+		{60, 100, 50, &color.Color{255, 255, 0}, false},
+		{180, 100, 50, &color.Color{0, 255, 255}, false},
+		{300, 100, 50, &color.Color{255, 0, 255}, false},
+		{0, 0, 50, &color.Color{128, 128, 128}, false},
+		{0, 0, 0, &color.Color{0, 0, 0}, false},
+		{0, 0, 100, &color.Color{255, 255, 255}, false},
+		{8000, 0, 0, nil, true},
 	}
 
 	for _, c := range cases {
-		actual := color.NewFromHSL(c.hue, c.saturation, c.lightness)
-		assert.Equal(t, c.expected, actual)
+		actual, err := color.NewFromHSL(c.hue, c.saturation, c.lightness)
+
+		if c.err {
+			assert.Nil(t, c.expected)
+			assert.Error(t, err)
+		} else {
+			assert.EqualExportedValues(t, c.expected, actual)
+			assert.NoError(t, err)
+		}
 	}
 }
 
