@@ -95,6 +95,35 @@ func TestNewFromHex(t *testing.T) {
 	}
 }
 
+func TestNewFromCMYK(t *testing.T) {
+	cases := []struct {
+		cyan, magenta, yellow, key int
+		expected                   *color.Color
+		err                        bool
+	}{
+		{0, 0, 0, 100, &color.Color{0, 0, 0}, false},
+		{0, 0, 0, 0, &color.Color{255, 255, 255}, false},
+		{0, 100, 100, 0, &color.Color{255, 0, 0}, false},
+		{100, 0, 100, 0, &color.Color{0, 255, 0}, false},
+		{100, 100, 0, 0, &color.Color{0, 0, 255}, false},
+		{0, 0, 100, 0, &color.Color{255, 255, 0}, false},
+		{0, 100, 0, 0, &color.Color{255, 0, 255}, false},
+		{100, 0, 0, 0, &color.Color{0, 255, 255}, false},
+	}
+
+	for _, c := range cases {
+		actual, err := color.NewFromCMYK(c.cyan, c.magenta, c.yellow, c.key)
+
+		if c.err {
+			assert.Nil(t, c.expected)
+			assert.Error(t, err)
+		} else {
+			assert.EqualExportedValues(t, c.expected, actual)
+			assert.NoError(t, err)
+		}
+	}
+}
+
 func TestNewFromHSL(t *testing.T) {
 	cases := []struct {
 		hue, saturation, lightness int
