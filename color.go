@@ -101,11 +101,6 @@ func (c Color) Hex() string {
 	return fmt.Sprintf("#%02x%02x%02x", c.R, c.G, c.B)
 }
 
-// RGB returns CSS `rgb` function (e.g. `rgb(255, 0, 0)`)
-func (c Color) RGB() string {
-	return fmt.Sprintf("rgb(%d, %d, %d)", c.R, c.G, c.B)
-}
-
 // HSL converts color to HSL (hue, saturation, lightness).
 func (c Color) HSL() *HSL {
 	r := float64(c.R) / 255

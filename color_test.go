@@ -121,31 +121,3 @@ func TestColor_Hex(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	}
 }
-
-func TestColor_RGB(t *testing.T) {
-	cases := []struct {
-		color    *color.Color
-		expected string
-	}{
-		{color: &color.Color{0, 0, 0}, expected: "rgb(0, 0, 0)"},
-		{color: &color.Color{0, 0, 1}, expected: "rgb(0, 0, 1)"},
-		{color: &color.Color{1, 2, 3}, expected: "rgb(1, 2, 3)"},
-		{color: &color.Color{255, 255, 255}, expected: "rgb(255, 255, 255)"},
-		{color: &color.Color{100, 200, 100}, expected: "rgb(100, 200, 100)"},
-	}
-
-	for _, c := range cases {
-		actual := c.color.RGB()
-		assert.Equal(t, c.expected, actual)
-	}
-
-	// Random tests.
-	for range 1000 {
-		r := rand.Intn(256)
-		g := rand.Intn(256)
-		b := rand.Intn(256)
-		expected := fmt.Sprintf("rgb(%d, %d, %d)", r, g, b)
-		actual := color.Color{uint8(r), uint8(g), uint8(b)}.RGB()
-		assert.Equal(t, expected, actual)
-	}
-}
