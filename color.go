@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"math"
 	"strconv"
-)
 
-// Percent convertation constant.
-const percent = 100
+	"github.com/shelepuginivan/color/internal/validate"
+)
 
 // Color represents a color.
 type Color struct {
@@ -80,17 +79,14 @@ func NewFromHex(hex string) (*Color, error) {
 }
 
 func NewFromCMYK(cyan, magenta, yellow, key int) (*Color, error) {
-	validity := [...]error{
-		isPercent(cyan, "cyan"),
-		isPercent(magenta, "magenta"),
-		isPercent(yellow, "yellow"),
-		isPercent(key, "key"),
-	}
-
-	for _, err := range validity {
-		if err != nil {
-			return nil, err
-		}
+	err := validate.All(
+		validate.IsPercent(cyan, "cyan"),
+		validate.IsPercent(magenta, "magenta"),
+		validate.IsPercent(yellow, "yellow"),
+		validate.IsPercent(key, "key"),
+	)
+	if err != nil {
+		return nil, err
 	}
 
 	c := float64(cyan) / 100
@@ -111,16 +107,13 @@ func NewFromCMYK(cyan, magenta, yellow, key int) (*Color, error) {
 
 // NewFromHSL returns a new instance of [Color] by converting HSL to RGB.
 func NewFromHSL(hue, saturation, lightness int) (*Color, error) {
-	validity := [...]error{
-		isDegree(hue, "hue"),
-		isPercent(saturation, "saturation"),
-		isPercent(lightness, "lightness"),
-	}
-
-	for _, err := range validity {
-		if err != nil {
-			return nil, err
-		}
+	err := validate.All(
+		validate.IsDegree(hue, "hue"),
+		validate.IsPercent(saturation, "saturation"),
+		validate.IsPercent(lightness, "lightness"),
+	)
+	if err != nil {
+		return nil, err
 	}
 
 	h := float64(hue) / 360
@@ -249,20 +242,4 @@ func hueToRGB(p, q, t float64) float64 {
 		return p + (q-p)*(2.0/3-t)*6
 	}
 	return p
-}
-
-// isPercent validates value in percents.
-func isPercent(p int, argname string) error {
-	if p < 0 || p > 100 {
-		return fmt.Errorf("%s must be a valid value in percents (integer in range [0, 100]), got %d", argname, p)
-	}
-	return nil
-}
-
-// isDegree validates value in degrees.
-func isDegree(d int, argname string) error {
-	if d < 0 || d > 360 {
-		return fmt.Errorf("%s must be a valid value in degress (integer in range [0, 360]), got %d", argname, d)
-	}
-	return nil
 }
