@@ -13,7 +13,7 @@ func IsPercent(p int, argname string) error {
 // IsDegree validates value in degrees.
 func IsDegree(d int, argname string) error {
 	if d < 0 || d > 360 {
-		return fmt.Errorf("%s must be a valid value in degress (integer in range [0, 360]), got %d", argname, d)
+		return fmt.Errorf("%s must be a valid value in degrees (integer in range [0, 360]), got %d", argname, d)
 	}
 	return nil
 }
