@@ -1,6 +1,7 @@
 package color_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/shelepuginivan/color"
@@ -34,4 +35,13 @@ func TestMix(t *testing.T) {
 		actual := color.Mix(c.colors...)
 		assert.Equal(t, c.expected, actual)
 	}
+}
+
+func ExampleMix() {
+	red := color.New(255, 0, 0)
+	green := color.New(0, 255, 0)
+	blue := color.New(0, 0, 255)
+
+	mix := color.Mix(red, green, blue)
+	fmt.Println(mix.Hex()) // Output: #555555
 }

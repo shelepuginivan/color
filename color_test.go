@@ -2,6 +2,7 @@ package color_test
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"testing"
 
@@ -38,6 +39,12 @@ func TestNew(t *testing.T) {
 
 		assert.EqualExportedValues(t, expected, actual)
 	}
+}
+
+func ExampleNew() {
+	green := color.New(0, 255, 0)
+
+	fmt.Println(green.Hex()) // Output: #00ff00
 }
 
 func TestNewFromHex(t *testing.T) {
@@ -95,6 +102,14 @@ func TestNewFromHex(t *testing.T) {
 	}
 }
 
+func ExampleNewFromHex() {
+	c, err := color.NewFromHex("#fe8019")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("rgb(%d, %d, %d)\n", c.R, c.G, c.B) // Output: rgb(254, 128, 25)
+}
+
 func TestNewFromCMYK(t *testing.T) {
 	cases := []struct {
 		cyan, magenta, yellow, key int
@@ -122,6 +137,14 @@ func TestNewFromCMYK(t *testing.T) {
 			assert.NoError(t, err)
 		}
 	}
+}
+
+func ExampleNewFromCMYK() {
+	magenta, err := color.NewFromCMYK(0, 100, 0, 0)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(magenta.Hex()) // Output: #ff00ff
 }
 
 func TestNewFromHSL(t *testing.T) {
@@ -155,6 +178,14 @@ func TestNewFromHSL(t *testing.T) {
 	}
 }
 
+func ExampleNewFromHSL() {
+	c, err := color.NewFromHSL(83, 34, 63)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(c.Hex()) // Output: #a8c181
+}
+
 func TestColor_Hex(t *testing.T) {
 	cases := []struct {
 		color    *color.Color
@@ -182,6 +213,11 @@ func TestColor_Hex(t *testing.T) {
 	}
 }
 
+func ExampleColor_Hex() {
+	black := color.New(0, 0, 0)
+	fmt.Println(black.Hex()) // Output: #000000
+}
+
 func TestColor_CMYK(t *testing.T) {
 	cases := []struct {
 		color    *color.Color
@@ -201,6 +237,12 @@ func TestColor_CMYK(t *testing.T) {
 		actual := c.color.CMYK()
 		assert.EqualExportedValues(t, c.expected, actual)
 	}
+}
+
+func ExampleColor_CMYK() {
+	yellow := color.New(255, 255, 0)
+	cmyk := yellow.CMYK()
+	fmt.Printf("cmyk(%d%%, %d%%, %d%%, %d%%)", cmyk.C, cmyk.M, cmyk.Y, cmyk.K) // Output: cmyk(0%, 0%, 100%, 0%)
 }
 
 func TestColor_HSL(t *testing.T) {
@@ -237,4 +279,10 @@ func TestColor_HSL(t *testing.T) {
 		assert.True(t, hsl.Saturation >= 0 && hsl.Saturation <= 100)
 		assert.True(t, hsl.Lightness >= 0 && hsl.Lightness <= 100)
 	}
+}
+
+func ExampleColor_HSL() {
+	c := color.New(219, 188, 127)
+	hsl := c.HSL()
+	fmt.Printf("hsl(%d, %d%%, %d%%)\n", hsl.Hue, hsl.Saturation, hsl.Lightness) // Output: hsl(39, 56%, 67%)
 }

@@ -1,6 +1,7 @@
 package color_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/shelepuginivan/color"
@@ -15,4 +16,10 @@ func TestMust(t *testing.T) {
 	assert.Panics(t, func() {
 		color.Must(color.NewFromHex(":("))
 	})
+}
+
+func ExampleMust() {
+	yellow := color.Must(color.NewFromCMYK(0, 0, 100, 0))
+
+	fmt.Println(yellow.Hex()) // Output: #ffff00
 }

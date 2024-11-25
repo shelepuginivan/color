@@ -1,6 +1,7 @@
 package color_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/shelepuginivan/color"
@@ -28,6 +29,13 @@ func TestLuminance(t *testing.T) {
 	}
 }
 
+func ExampleLuminance() {
+	red := color.New(255, 0, 0)
+	luminance := color.Luminance(red)
+
+	fmt.Println(luminance) // Output: 0.2126
+}
+
 func TestContrast(t *testing.T) {
 	cases := []struct {
 		c1, c2   *color.Color
@@ -44,6 +52,14 @@ func TestContrast(t *testing.T) {
 		actual := color.Contrast(c.c1, c.c2)
 		assert.InDelta(t, c.expected, actual, 0.001)
 	}
+}
+
+func ExampleContrast() {
+	black := color.New(0, 0, 0)
+	white := color.New(255, 255, 255)
+	contrast := color.Contrast(black, white)
+
+	fmt.Println(contrast) // Output: 21
 }
 
 func TestContrastBlackWhite(t *testing.T) {
@@ -63,4 +79,11 @@ func TestContrastBlackWhite(t *testing.T) {
 		actual := color.ContrastBlackWhite(c.color)
 		assert.Equal(t, c.expected, actual)
 	}
+}
+
+func ExampleContrastBlackWhite() {
+	c := color.New(27, 30, 28) // Very dark gray.
+	textColor := color.ContrastBlackWhite(c)
+
+	fmt.Println(textColor.Hex()) // Output: #ffffff
 }

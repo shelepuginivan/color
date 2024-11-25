@@ -39,7 +39,8 @@ func Contrast(c1, c2 *Color) float64 {
 }
 
 // ContrastBlackWhite returns black or white depending on luminance of the
-// given color.
+// given color. An example use case is to determine the text color that
+// contrasts better with a given color.
 func ContrastBlackWhite(c1 *Color) *Color {
 	if Luminance(c1) > 0.179 {
 		return &Color{0, 0, 0}

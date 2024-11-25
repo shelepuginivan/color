@@ -8,26 +8,32 @@ import (
 	"github.com/shelepuginivan/color/internal/validate"
 )
 
-// Color represents a color.
+// Color represents a color. Color is stored as [RGB].
+//
+// [RGB]: https://en.wikipedia.org/wiki/RGB_color_model
 type Color struct {
 	R uint8 // Red.
 	G uint8 // Green.
 	B uint8 // Blue.
 }
 
-// HSL representation of color.
+// [HSL] representation of color.
+//
+// [HSL]: https://en.wikipedia.org/wiki/HSL
 type HSL struct {
-	Hue        int // Hue (degrees).
-	Saturation int // Saturation (percent).
-	Lightness  int // Lightness (percent).
+	Hue        int // Hue (in degrees).
+	Saturation int // Saturation (in percents).
+	Lightness  int // Lightness (in percents).
 }
 
-// CMYK representation of color.
+// [CMYK] representation of color.
+//
+// [CMYK]: https://en.wikipedia.org/wiki/CMYK_color_model
 type CMYK struct {
-	C int // Cyan (percent).
-	M int // Magenta (percent).
-	Y int // Yellow (percent).
-	K int // Black key (percent).
+	C int // Cyan (in percents).
+	M int // Magenta (in percents).
+	Y int // Yellow (in percents).
+	K int // Black key (in percents).
 }
 
 // New returns a new instance of [Color].
@@ -37,8 +43,11 @@ func New(r, g, b uint8) *Color {
 
 // NewFromHex returns a new instance of [Color] by parsing hexadecimal color
 // string. The string may start with hash character (`#`) and may be either
-// short or long hexadecimal color. E.g. `fff`, `#fff`, `ffffff`, `#ffffff` are
-// all valid arguments.
+// short or long hexadecimal color. All of the following values are valid arguments:
+//   - fff
+//   - #fff
+//   - ffffff
+//   - #ffffff
 func NewFromHex(hex string) (*Color, error) {
 	i := 0
 	if hex[0] == '#' {
@@ -78,6 +87,7 @@ func NewFromHex(hex string) (*Color, error) {
 	return &Color{uint8(r), uint8(g), uint8(b)}, nil
 }
 
+// NewFromCMYK returns a new instance of [Color] by converting CMYK to RGB.
 func NewFromCMYK(cyan, magenta, yellow, key int) (*Color, error) {
 	err := validate.All(
 		validate.IsPercent(cyan, "cyan"),
