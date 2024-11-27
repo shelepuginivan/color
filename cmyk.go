@@ -1,6 +1,10 @@
 package color
 
-import "math"
+import (
+	"math"
+
+	"github.com/shelepuginivan/color/internal/normalize"
+)
 
 // CMYK represents a color in [CMYK] color space.
 //
@@ -14,17 +18,20 @@ type CMYK struct {
 
 // NewCMYK returns a new instance of [CMYK].
 func NewCMYK(c, m, y, k int) *CMYK {
-	// TODO: normalize
-	return &CMYK{c, m, y, k}
+	return &CMYK{
+		C: normalize.Percents(c),
+		M: normalize.Percents(m),
+		Y: normalize.Percents(y),
+		K: normalize.Percents(k),
+	}
 }
 
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c CMYK) RGB() *RGB {
-	// TODO: normalize
-	cyan := float64(c.C) / 100
-	magenta := float64(c.M) / 100
-	yellow := float64(c.Y) / 100
-	key := float64(c.K) / 100
+	cyan := normalize.PercentsFloat(c.C)
+	magenta := normalize.PercentsFloat(c.M)
+	yellow := normalize.PercentsFloat(c.Y)
+	key := normalize.PercentsFloat(c.K)
 
 	r := 255 * (1 - cyan) * (1 - key)
 	g := 255 * (1 - magenta) * (1 - key)

@@ -1,6 +1,10 @@
 package color
 
-import "math"
+import (
+	"math"
+
+	"github.com/shelepuginivan/color/internal/normalize"
+)
 
 // [HSL] representation of color.
 //
@@ -13,16 +17,18 @@ type HSL struct {
 
 // NewHSL returns a new instance of [HSL].
 func NewHSL(h, s, l int) *HSL {
-	// TODO: normalize percents and degrees.
-	return &HSL{h, s, l}
+	return &HSL{
+		Hue:        normalize.Degrees(h),
+		Saturation: normalize.Percents(s),
+		Lightness:  normalize.Percents(l),
+	}
 }
 
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c HSL) RGB() *RGB {
-	// TODO: normalize percents and degrees.
-	h := float64(c.Hue) / 360
-	s := float64(c.Saturation) / 100
-	l := float64(c.Lightness) / 100
+	h := normalize.DegreesFloat(c.Hue)
+	s := normalize.PercentsFloat(c.Saturation)
+	l := normalize.PercentsFloat(c.Lightness)
 
 	// The default case is when the color is achromatic.
 	var (
