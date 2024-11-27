@@ -83,8 +83,8 @@ func (c RGB) HSL() *HSL {
 	}
 
 	return &HSL{
-		Hue:        int(h),
-		Saturation: int(s * 100),
-		Lightness:  int(l * 100),
+		H: int(h),
+		S: int(s * 100),
+		L: int(l * 100),
 	}
 }

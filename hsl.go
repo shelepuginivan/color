@@ -10,25 +10,25 @@ import (
 //
 // [HSL]: https://en.wikipedia.org/wiki/HSL
 type HSL struct {
-	Hue        int // Hue (in degrees).
-	Saturation int // Saturation (in percents).
-	Lightness  int // Lightness (in percents).
+	H int // Hue (in degrees).
+	S int // Saturation (in percents).
+	L int // Lightness (in percents).
 }
 
 // NewHSL returns a new instance of [HSL].
 func NewHSL(h, s, l int) *HSL {
 	return &HSL{
-		Hue:        normalize.Degrees(h),
-		Saturation: normalize.Percents(s),
-		Lightness:  normalize.Percents(l),
+		H: normalize.Degrees(h),
+		S: normalize.Percents(s),
+		L: normalize.Percents(l),
 	}
 }
 
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c HSL) RGB() *RGB {
-	h := normalize.DegreesFloat(c.Hue)
-	s := normalize.PercentsFloat(c.Saturation)
-	l := normalize.PercentsFloat(c.Lightness)
+	h := normalize.DegreesFloat(c.H)
+	s := normalize.PercentsFloat(c.S)
+	l := normalize.PercentsFloat(c.L)
 
 	// The default case is when the color is achromatic.
 	var (

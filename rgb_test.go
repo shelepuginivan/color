@@ -135,14 +135,14 @@ func TestColor_HSL(t *testing.T) {
 		color := color.RGB{uint8(r), uint8(g), uint8(b)}
 		hsl := color.HSL()
 
-		assert.True(t, hsl.Hue >= 0 && hsl.Hue < 360)
-		assert.True(t, hsl.Saturation >= 0 && hsl.Saturation <= 100)
-		assert.True(t, hsl.Lightness >= 0 && hsl.Lightness <= 100)
+		assert.True(t, hsl.H >= 0 && hsl.H < 360)
+		assert.True(t, hsl.S >= 0 && hsl.S <= 100)
+		assert.True(t, hsl.L >= 0 && hsl.L <= 100)
 	}
 }
 
 func ExampleRGB_HSL() {
 	c := color.NewRGB(219, 188, 127)
 	hsl := c.HSL()
-	fmt.Printf("hsl(%d, %d%%, %d%%)\n", hsl.Hue, hsl.Saturation, hsl.Lightness) // Output: hsl(39, 56%, 67%)
+	fmt.Printf("hsl(%d, %d%%, %d%%)\n", hsl.H, hsl.S, hsl.L) // Output: hsl(39, 56%, 67%)
 }
