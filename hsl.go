@@ -55,9 +55,11 @@ func (c HSL) HSV() *HSV {
 
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c HSL) RGB() *RGB {
-	h := normalize.DegreesFloat(c.H)
-	s := normalize.PercentsFloat(c.S)
-	l := normalize.PercentsFloat(c.L)
+	var (
+		h = normalize.DegreesFloat(c.H)
+		s = normalize.PercentsFloat(c.S)
+		l = normalize.PercentsFloat(c.L)
+	)
 
 	// The default case is when the color is achromatic.
 	var (

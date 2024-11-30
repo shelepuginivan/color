@@ -28,14 +28,18 @@ func NewCMYK(c, m, y, k int) *CMYK {
 
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c CMYK) RGB() *RGB {
-	cyan := normalize.PercentsFloat(c.C)
-	magenta := normalize.PercentsFloat(c.M)
-	yellow := normalize.PercentsFloat(c.Y)
-	key := normalize.PercentsFloat(c.K)
+	var (
+		cyan    = normalize.PercentsFloat(c.C)
+		magenta = normalize.PercentsFloat(c.M)
+		yellow  = normalize.PercentsFloat(c.Y)
+		key     = normalize.PercentsFloat(c.K)
+	)
 
-	r := 255 * (1 - cyan) * (1 - key)
-	g := 255 * (1 - magenta) * (1 - key)
-	b := 255 * (1 - yellow) * (1 - key)
+	var (
+		r = 255 * (1 - cyan) * (1 - key)
+		g = 255 * (1 - magenta) * (1 - key)
+		b = 255 * (1 - yellow) * (1 - key)
+	)
 
 	return &RGB{
 		R: uint8(math.Round(r)),
