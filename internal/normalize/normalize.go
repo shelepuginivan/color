@@ -40,7 +40,11 @@ func FloatPercents(v float64) int {
 
 // Degrees normalizes value in degrees. v mod 360 is returned.
 func Degrees(v int) int {
-	return v % 360
+	norm := v % 360
+	if norm < 0 {
+		norm += 360
+	}
+	return norm
 }
 
 // DegreesFloat returns normalized value in degrees as decimal fraction.
