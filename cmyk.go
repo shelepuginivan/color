@@ -53,3 +53,14 @@ func (c CMYK) RGB() *RGB {
 func (c CMYK) String() string {
 	return fmt.Sprintf("cmyk(%d%%, %d%%, %d%%, %d%%)", c.C, c.M, c.Y, c.K)
 }
+
+// Edit allows in-place modification of the [CMYK] color instance using the
+// provided editing function.
+//
+// The returned value is a pointer to the same instance of [CMYK], so it should
+// not be used to assign values to other variables. It is intended for method
+// chaining.
+func (c *CMYK) Edit(editfn func(c *CMYK)) *CMYK {
+	editfn(c)
+	return c
+}

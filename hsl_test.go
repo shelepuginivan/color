@@ -61,3 +61,55 @@ func ExampleHSL_RGB() {
 	c := color.NewHSL(0, 100, 50)
 	fmt.Println(c.RGB()) // Output: rgb(255, 0, 0)
 }
+
+func TestHSL_Edit(t *testing.T) {
+	cases := []struct {
+		color    *color.HSL
+		expected *color.HSL
+		editfn   func(*color.HSL)
+	}{
+		{
+			color:    &color.HSL{H: 120, S: 100, L: 50},
+			expected: &color.HSL{H: 120, S: 50, L: 50},
+			editfn: func(c *color.HSL) {
+				c.S = 50
+			},
+		},
+		{
+			color:    &color.HSL{H: 240, S: 100, L: 50},
+			expected: &color.HSL{H: 240, S: 100, L: 75},
+			editfn: func(c *color.HSL) {
+				c.L = 75
+			},
+		},
+		{
+			color:    &color.HSL{H: 0, S: 0, L: 0},
+			expected: &color.HSL{H: 0, S: 0, L: 100},
+			editfn: func(c *color.HSL) {
+				c.L = 100
+			},
+		},
+		{
+			color:    &color.HSL{H: 360, S: 100, L: 100},
+			expected: &color.HSL{H: 360, S: 100, L: 0},
+			editfn: func(c *color.HSL) {
+				c.L = 0
+			},
+		},
+	}
+
+	for _, c := range cases {
+		actual := c.color.Edit(c.editfn)
+		assert.Equal(t, c.expected, actual)
+		assert.Equal(t, c.expected, c.color)
+	}
+}
+
+func ExampleHSL_Edit() {
+	cyan := color.NewHSL(180, 100, 50) // rgb(0, 255, 255)
+
+	// Decrease saturation and print as RGB.
+	fmt.Println(cyan.Edit(func(c *color.HSL) {
+		c.S = 30
+	}).RGB()) // Output: rgb(89, 166, 166)
+}

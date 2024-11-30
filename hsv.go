@@ -58,12 +58,19 @@ func (c HSV) RGB() *RGB {
 		v = normalize.PercentsFloat(c.V)
 	)
 
-	var (
-		chroma = math.Round(s * v)
+	// Helper hue value that determines position on color wheel.
+	h := float64(c.H)
+	if h < 0 {
+		h += 360
+	} else if h >= 360 {
+		h = math.Mod(h, 360)
+	}
+	h /= 60
 
-		// Helper hue value that determines position on color wheel.
-		h       = float64(c.H) / 60.0
-		x       = chroma * (1 - max(float64(int(h)%2-1), float64(1-int(h)%2)))
+	var (
+		chroma  = s * v
+		rem     = math.Mod(h, 2)
+		x       = chroma * (1 - math.Abs(rem-1))
 		m       = v - chroma
 		r, g, b float64
 	)
@@ -93,4 +100,15 @@ func (c HSV) RGB() *RGB {
 // String returns string representation of [HSV].
 func (c HSV) String() string {
 	return fmt.Sprintf("hsv(%d, %d%%, %d%%)", c.H, c.S, c.V)
+}
+
+// Edit allows in-place modification of the [HSV] color instance using the
+// provided editing function.
+//
+// The returned value is a pointer to the same instance of [HSV], so it should
+// not be used to assign values to other variables. It is intended for method
+// chaining.
+func (c *HSV) Edit(editfn func(c *HSV)) *HSV {
+	editfn(c)
+	return c
 }

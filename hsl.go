@@ -93,6 +93,17 @@ func (c HSL) String() string {
 	return fmt.Sprintf("hsl(%d, %d%%, %d%%)", c.H, c.S, c.L)
 }
 
+// Edit allows in-place modification of the [HSL] color instance using the
+// provided editing function.
+//
+// The returned value is a pointer to the same instance of [HSL], so it should
+// not be used to assign values to other variables. It is intended for method
+// chaining.
+func (c *HSL) Edit(editfn func(c *HSL)) *HSL {
+	editfn(c)
+	return c
+}
+
 // hueToRGB calculates the RGB value for a given hue component. It takes three
 // parameters: p and q are the intermediate values calculated from the HSL
 // representation, and t represents the normalized hue value (ranging from 0 to

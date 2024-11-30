@@ -103,3 +103,14 @@ func (c RGB) HSL() *HSL {
 func (c RGB) String() string {
 	return fmt.Sprintf("rgb(%d, %d, %d)", c.R, c.G, c.B)
 }
+
+// Edit allows in-place modification of the [RGB] color instance using the
+// provided editing function.
+//
+// The returned value is a pointer to the same instance of [RGB], so it should
+// not be used to assign values to other variables. It is intended for method
+// chaining.
+func (c *RGB) Edit(editfn func(c *RGB)) *RGB {
+	editfn(c)
+	return c
+}

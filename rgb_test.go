@@ -145,3 +145,42 @@ func ExampleRGB_HSL() {
 	c := color.NewRGB(219, 188, 127)
 	fmt.Println(c.HSL()) // Output: hsl(39, 56%, 67%)
 }
+
+func TestRGB_Edit(t *testing.T) {
+	cases := []struct {
+		color    *color.RGB
+		expected *color.RGB
+		editfn   func(*color.RGB)
+	}{
+		{
+			color:    &color.RGB{200, 200, 200},
+			expected: &color.RGB{100, 100, 200},
+			editfn: func(c *color.RGB) {
+				c.R /= 2
+				c.G /= 2
+			},
+		},
+		{
+			color:    &color.RGB{255, 0, 0},
+			expected: &color.RGB{0, 255, 0},
+			editfn: func(c *color.RGB) {
+				c.R, c.G = c.G, c.R
+			},
+		},
+	}
+
+	for _, c := range cases {
+		actual := c.color.Edit(c.editfn)
+		assert.Equal(t, c.expected, actual)
+		assert.Equal(t, c.expected, c.color)
+	}
+}
+
+func ExampleRGB_Edit() {
+	silver := color.NewRGB(191, 191, 191)
+	fmt.Println(silver.Edit(func(c *color.RGB) {
+		c.R += 10
+		c.G += 20
+		c.B += 30
+	})) // Output: rgb(201, 211, 221)
+}
