@@ -8,6 +8,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestCMYK(t *testing.T) {
+	assert.Implements(t, (*interface {
+		Hex() string
+		HSL() *color.HSL
+		HSV() *color.HSV
+		RGB() *color.RGB
+
+		String() string
+	})(nil), color.CMYK{})
+}
+
 func TestCMYK_RGB(t *testing.T) {
 	cases := []struct {
 		color    *color.CMYK

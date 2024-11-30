@@ -9,6 +9,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestRGB(t *testing.T) {
+	assert.Implements(t, (*interface {
+		CMYK() *color.CMYK
+		Hex() string
+		HSL() *color.HSL
+		HSV() *color.HSV
+
+		String() string
+	})(nil), color.RGB{})
+}
+
 func TestNewRGB(t *testing.T) {
 	cases := []struct {
 		r        uint8
@@ -143,7 +154,45 @@ func TestColor_HSL(t *testing.T) {
 
 func ExampleRGB_HSL() {
 	c := color.NewRGB(219, 188, 127)
-	fmt.Println(c.HSL()) // Output: hsl(39, 56%, 67%)
+	fmt.Println(c.HSL()) // Output: hsl(40, 56%, 68%)
+}
+
+func TestRGB_HSV(t *testing.T) {
+	cases := []struct {
+		color    *color.RGB
+		expected *color.HSV
+	}{
+		{&color.RGB{255, 0, 0}, &color.HSV{0, 100, 100}},
+		{&color.RGB{0, 255, 0}, &color.HSV{120, 100, 100}},
+		{&color.RGB{0, 0, 255}, &color.HSV{240, 100, 100}},
+		{&color.RGB{255, 255, 0}, &color.HSV{60, 100, 100}},
+		{&color.RGB{0, 255, 255}, &color.HSV{180, 100, 100}},
+		{&color.RGB{255, 0, 255}, &color.HSV{300, 100, 100}},
+		{&color.RGB{128, 128, 128}, &color.HSV{0, 0, 50}},
+		{&color.RGB{0, 0, 0}, &color.HSV{0, 0, 0}},
+		{&color.RGB{255, 255, 255}, &color.HSV{0, 0, 100}},
+		{&color.RGB{0, 0, 128}, &color.HSV{240, 100, 50}},
+		{&color.RGB{0, 128, 128}, &color.HSV{180, 100, 50}},
+		{&color.RGB{128, 0, 0}, &color.HSV{0, 100, 50}},
+	}
+
+	for _, c := range cases {
+		actual := c.color.HSV()
+		assert.Equal(t, c.expected, actual)
+	}
+
+	// Random tests.
+	for range 1000 {
+		r := rand.Intn(256)
+		g := rand.Intn(256)
+		b := rand.Intn(256)
+		color := color.RGB{uint8(r), uint8(g), uint8(b)}
+		hsv := color.HSV()
+
+		assert.True(t, hsv.H >= 0 && hsv.H < 360)
+		assert.True(t, hsv.S >= 0 && hsv.S <= 100)
+		assert.True(t, hsv.V >= 0 && hsv.V <= 100)
+	}
 }
 
 func TestRGB_Edit(t *testing.T) {

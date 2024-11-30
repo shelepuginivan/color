@@ -27,6 +27,22 @@ func NewCMYK(c, m, y, k int) *CMYK {
 	}
 }
 
+// Hex returns hexadecimal representation of color.
+func (c CMYK) Hex() string {
+	rgb := c.RGB()
+	return fmt.Sprintf("#%02x%02x%02x", rgb.R, rgb.G, rgb.B)
+}
+
+// HSL returns [HSL] representation of color (hue, saturation, lightness).
+func (c CMYK) HSL() *HSL {
+	return c.RGB().HSL()
+}
+
+// HSV returns [HSV] representation of color (hue, saturation, value).
+func (c CMYK) HSV() *HSV {
+	return c.RGB().HSV()
+}
+
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c CMYK) RGB() *RGB {
 	var (

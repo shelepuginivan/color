@@ -3,6 +3,8 @@ package color
 import (
 	"fmt"
 	"math"
+
+	"github.com/shelepuginivan/color/internal/normalize"
 )
 
 // RGB represents a color in [RGB] color space.
@@ -17,11 +19,6 @@ type RGB struct {
 // NewRGB returns a new instance of [RGB].
 func NewRGB(r, g, b uint8) *RGB {
 	return &RGB{r, g, b}
-}
-
-// Hex returns hexadecimal representation of color.
-func (c RGB) Hex() string {
-	return fmt.Sprintf("#%02x%02x%02x", c.R, c.G, c.B)
 }
 
 // CMYK returns [CMYK] representation of color (cyan, magenta, yellow, key).
@@ -58,6 +55,11 @@ func (c RGB) CMYK() *CMYK {
 	}
 }
 
+// Hex returns hexadecimal representation of color.
+func (c RGB) Hex() string {
+	return fmt.Sprintf("#%02x%02x%02x", c.R, c.G, c.B)
+}
+
 // HSL returns [HSL] representation of color (hue, saturation, lightness).
 func (c RGB) HSL() *HSL {
 	var (
@@ -67,11 +69,8 @@ func (c RGB) HSL() *HSL {
 	)
 
 	var (
-		mx = max(r, g, b)
-		mn = min(r, g, b)
-	)
-
-	var (
+		mx      = max(r, g, b)
+		mn      = min(r, g, b)
 		h, s, l = 0.0, 0.0, (mx + mn) / 2
 		d       = mx - mn
 	)
@@ -87,16 +86,49 @@ func (c RGB) HSL() *HSL {
 		}
 
 		h *= 60
-		if h < 0 {
-			h += 360
-		}
 		s = d / (1 - max(2*l-1, 1-2*l))
 	}
 
 	return &HSL{
-		H: int(h),
-		S: int(s * 100),
-		L: int(l * 100),
+		H: normalize.Degrees(int(math.Round(h))),
+		S: normalize.FloatPercents(s),
+		L: normalize.FloatPercents(l),
+	}
+}
+
+// HSV returns [HSV] representation of color (hue, saturation, value).
+func (c RGB) HSV() *HSV {
+	var (
+		r = float64(c.R) / 255
+		g = float64(c.G) / 255
+		b = float64(c.B) / 255
+	)
+
+	var (
+		mx      = max(r, g, b)
+		mn      = min(r, g, b)
+		h, s, v = 0.0, 0.0, mx
+		d       = mx - mn
+	)
+
+	if d != 0 {
+		switch mx {
+		case r:
+			h = (g - b) / d
+		case g:
+			h = (b-r)/d + 2
+		default:
+			h = (r-g)/d + 4
+		}
+
+		h *= 60
+		s = d / mx
+	}
+
+	return &HSV{
+		H: normalize.Degrees(int(math.Round(h))),
+		S: normalize.FloatPercents(s),
+		V: normalize.FloatPercents(v),
 	}
 }
 

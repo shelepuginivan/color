@@ -25,6 +25,18 @@ func NewHSV(h, s, v int) *HSV {
 	}
 }
 
+// CMYK returns [CMYK] representation of color (cyan, magenta, yellow, key).
+func (c HSV) CMYK() *CMYK {
+	return c.RGB().CMYK()
+}
+
+// Hex returns hexadecimal representation of color.
+func (c HSV) Hex() string {
+	rgb := c.RGB()
+	return fmt.Sprintf("#%02x%02x%02x", rgb.R, rgb.G, rgb.B)
+}
+
+// HSL returns [HSL] representation of color (hue, saturation, lightness).
 func (c HSV) HSL() *HSL {
 	// Value normalization.
 	var (
@@ -52,6 +64,7 @@ func (c HSV) HSL() *HSL {
 	}
 }
 
+// RGB returns [RGB] representation of color (red, green, blue).
 func (c HSV) RGB() *RGB {
 	var (
 		s = normalize.PercentsFloat(c.S)
