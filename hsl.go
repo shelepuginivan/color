@@ -28,7 +28,6 @@ func NewHSL(h, s, l int) *HSL {
 func (c HSL) HSV() *HSV {
 	// Value normalization.
 	var (
-		h = normalize.DegreesFloat(c.H)
 		s = normalize.PercentsFloat(c.S)
 		l = normalize.PercentsFloat(c.L)
 	)
@@ -37,7 +36,7 @@ func (c HSL) HSV() *HSV {
 	// S_V = 0 if V equals 0, 2(1 - L/V) otherwise
 	// V = L + S_L * min(L, 1-l)
 	var (
-		hue        = h
+		hue        = c.H
 		saturation = 0.0
 		value      = l + s*min(l, 1-l)
 	)
@@ -47,7 +46,7 @@ func (c HSL) HSV() *HSV {
 	}
 
 	return &HSV{
-		H: normalize.FloatDegrees(hue),
+		H: hue,
 		S: normalize.FloatPercents(saturation),
 		V: normalize.FloatPercents(value),
 	}
