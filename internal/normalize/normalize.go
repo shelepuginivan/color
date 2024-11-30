@@ -47,3 +47,8 @@ func Degrees(v int) int {
 func DegreesFloat(v int) float64 {
 	return float64(Degrees(v)) / 360
 }
+
+// FloatDegrees returns normalized decimal fraction value in degrees.
+func FloatDegrees(v float64) int {
+	return Degrees(int(math.Round(360 * v)))
+}
