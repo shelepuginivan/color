@@ -1,6 +1,7 @@
 package color
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/shelepuginivan/color/internal/normalize"
@@ -87,4 +88,9 @@ func (c HSV) RGB() *RGB {
 		G: uint8(math.Round((g + m) * 255)),
 		B: uint8(math.Round((b + m) * 255)),
 	}
+}
+
+// String returns string representation of [HSV].
+func (c HSV) String() string {
+	return fmt.Sprintf("hsv(%d, %d%%, %d%%)", c.H, c.S, c.V)
 }

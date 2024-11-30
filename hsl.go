@@ -1,6 +1,7 @@
 package color
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/shelepuginivan/color/internal/normalize"
@@ -85,6 +86,11 @@ func (c HSL) RGB() *RGB {
 		G: uint8(math.Round(g * 255)),
 		B: uint8(math.Round(b * 255)),
 	}
+}
+
+// String returns string representation of [HSL].
+func (c HSL) String() string {
+	return fmt.Sprintf("hsl(%d, %d%%, %d%%)", c.H, c.S, c.L)
 }
 
 // hueToRGB calculates the RGB value for a given hue component. It takes three

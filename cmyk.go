@@ -1,6 +1,7 @@
 package color
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/shelepuginivan/color/internal/normalize"
@@ -46,4 +47,9 @@ func (c CMYK) RGB() *RGB {
 		G: uint8(math.Round(g)),
 		B: uint8(math.Round(b)),
 	}
+}
+
+// String returns string representation of [CMYK].
+func (c CMYK) String() string {
+	return fmt.Sprintf("cmyk(%d%%, %d%%, %d%%, %d%%)", c.C, c.M, c.Y, c.K)
 }

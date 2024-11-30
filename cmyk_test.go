@@ -1,6 +1,7 @@
 package color_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/shelepuginivan/color"
@@ -26,4 +27,9 @@ func TestCMYK_RGB(t *testing.T) {
 		actual := c.color.RGB()
 		assert.Equal(t, c.expected, actual)
 	}
+}
+
+func ExampleCMYK_RGB() {
+	yellow := color.NewCMYK(0, 0, 100, 0)
+	fmt.Println(yellow.RGB()) // Output: rgb(255, 255, 0)
 }

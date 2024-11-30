@@ -99,3 +99,7 @@ func (c RGB) HSL() *HSL {
 		L: int(l * 100),
 	}
 }
+
+func (c RGB) String() string {
+	return fmt.Sprintf("rgb(%d, %d, %d)", c.R, c.G, c.B)
+}

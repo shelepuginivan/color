@@ -143,6 +143,5 @@ func TestColor_HSL(t *testing.T) {
 
 func ExampleRGB_HSL() {
 	c := color.NewRGB(219, 188, 127)
-	hsl := c.HSL()
-	fmt.Printf("hsl(%d, %d%%, %d%%)\n", hsl.H, hsl.S, hsl.L) // Output: hsl(39, 56%, 67%)
+	fmt.Println(c.HSL()) // Output: hsl(39, 56%, 67%)
 }
