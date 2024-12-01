@@ -132,6 +132,28 @@ func (c RGB) HSV() *HSV {
 	}
 }
 
+func (c RGB) XYZ() *XYZ {
+	// Convert to sRGB.
+	var (
+		r = float64(c.R) / 255.0
+		g = float64(c.G) / 255.0
+		b = float64(c.B) / 255.0
+	)
+
+	// Vectorize sRGB values.
+	var (
+		rVec = srgbToLinear(r) * 100.0
+		gVec = srgbToLinear(g) * 100.0
+		bVec = srgbToLinear(b) * 100.0
+	)
+
+	X := rVec*0.4124564 + gVec*0.3575761 + bVec*0.1804375
+	Y := rVec*0.2126729 + gVec*0.7151522 + bVec*0.0721750
+	Z := rVec*0.0193339 + gVec*0.1191920 + bVec*0.9503041
+
+	return &XYZ{X, Y, Z}
+}
+
 func (c RGB) String() string {
 	return fmt.Sprintf("rgb(%d, %d, %d)", c.R, c.G, c.B)
 }
