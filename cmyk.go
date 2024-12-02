@@ -70,6 +70,12 @@ func (c CMYK) String() string {
 	return fmt.Sprintf("cmyk(%d%%, %d%%, %d%%, %d%%)", c.C, c.M, c.Y, c.K)
 }
 
+// XYZ returns [XYZ] representation of color (long wavelengths, brightness,
+// short wavelengths).
+func (c CMYK) XYZ() *XYZ {
+	return c.RGB().XYZ()
+}
+
 // Edit allows in-place modification of the [CMYK] color instance using the
 // provided editing function.
 //

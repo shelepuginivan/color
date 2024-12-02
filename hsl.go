@@ -99,6 +99,12 @@ func (c HSL) RGB() *RGB {
 	}
 }
 
+// XYZ returns [XYZ] representation of color (long wavelengths, brightness,
+// short wavelengths).
+func (c HSL) XYZ() *XYZ {
+	return c.RGB().XYZ()
+}
+
 // String returns string representation of [HSL].
 func (c HSL) String() string {
 	return fmt.Sprintf("hsl(%d, %d%%, %d%%)", c.H, c.S, c.L)

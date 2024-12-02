@@ -14,6 +14,7 @@ func TestCMYK(t *testing.T) {
 		HSL() *color.HSL
 		HSV() *color.HSV
 		RGB() *color.RGB
+		XYZ() *color.XYZ
 
 		String() string
 	})(nil), color.CMYK{})

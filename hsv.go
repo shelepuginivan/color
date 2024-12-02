@@ -110,6 +110,12 @@ func (c HSV) RGB() *RGB {
 	}
 }
 
+// XYZ returns [XYZ] representation of color (long wavelengths, brightness,
+// short wavelengths).
+func (c HSV) XYZ() *XYZ {
+	return c.RGB().XYZ()
+}
+
 // String returns string representation of [HSV].
 func (c HSV) String() string {
 	return fmt.Sprintf("hsv(%d, %d%%, %d%%)", c.H, c.S, c.V)

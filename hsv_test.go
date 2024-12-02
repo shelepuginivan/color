@@ -14,6 +14,7 @@ func TestHSV(t *testing.T) {
 		Hex() string
 		HSL() *color.HSL
 		RGB() *color.RGB
+		XYZ() *color.XYZ
 
 		String() string
 	})(nil), color.HSV{})

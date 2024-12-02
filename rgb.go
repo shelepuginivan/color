@@ -132,6 +132,8 @@ func (c RGB) HSV() *HSV {
 	}
 }
 
+// XYZ returns [XYZ] representation of color (long wavelengths, brightness,
+// short wavelengths).
 func (c RGB) XYZ() *XYZ {
 	// Convert to sRGB.
 	var (
@@ -154,6 +156,7 @@ func (c RGB) XYZ() *XYZ {
 	return &XYZ{X, Y, Z}
 }
 
+// String returns string representation of [RGB].
 func (c RGB) String() string {
 	return fmt.Sprintf("rgb(%d, %d, %d)", c.R, c.G, c.B)
 }
