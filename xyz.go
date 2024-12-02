@@ -1,5 +1,13 @@
 package color
 
+// Default reference white constants. These values determine target white that
+// represents "white".
+const (
+	ReferenceWhiteX = 95.047
+	ReferenceWhiteY = 100.000
+	ReferenceWhiteZ = 108.883
+)
+
 // XYZ represents a color in [XYZ] color space.
 //
 // [XYZ]: https://en.wikipedia.org/wiki/CIE_1931_color_space
@@ -11,12 +19,25 @@ type XYZ struct {
 
 // Lab returns [Lab] representation of color (lightness, red-green,
 // yellow-blue).
-func (c *XYZ) Lab() *Lab {
+//
+// (95.047, 100.000, 108.883) is used as a reference white. Use
+// [XYZ.LabWithReferenceWhite] to specify a different reference white.
+func (c XYZ) Lab() *Lab {
 	// Observer = 2°, Illuminant = D65.
+	return c.LabWithReferenceWhite(&XYZ{
+		X: ReferenceWhiteX,
+		Y: ReferenceWhiteY,
+		Z: ReferenceWhiteZ,
+	})
+}
+
+// LabWithReferenceWhite returns [Lab] representation of color, allowing to
+// specify reference white color.
+func (c XYZ) LabWithReferenceWhite(white *XYZ) *Lab {
 	var (
-		fx = xyzValToLabF(c.X / 95.047)
-		fy = xyzValToLabF(c.Y / 100.000)
-		fz = xyzValToLabF(c.Z / 108.883)
+		fx = xyzValToLabF(c.X / white.X)
+		fy = xyzValToLabF(c.Y / white.Y)
+		fz = xyzValToLabF(c.Z / white.Z)
 	)
 
 	return &Lab{
