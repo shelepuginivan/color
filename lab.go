@@ -1,5 +1,7 @@
 package color
 
+import "fmt"
+
 // Lab represents a color in [Lab] colorspace.
 //
 // [Lab]: https://en.wikipedia.org/wiki/CIELAB_color_space
@@ -22,6 +24,31 @@ func NewLabWithReferenceWhite(l, a, b float64, white *XYZ) *Lab {
 	return &Lab{l, a, b, white}
 }
 
+// CMYK returns [CMYK] representation of color (cyan, magenta, yellow, key).
+func (c Lab) CMYK() *CMYK {
+	return c.XYZ().CMYK()
+}
+
+// Hex returns hexadecimal representation of color.
+func (c Lab) Hex() string {
+	return c.XYZ().Hex()
+}
+
+// HSL returns [HSL] representation of color (hue, saturation, lightness).
+func (c Lab) HSL() *HSL {
+	return c.XYZ().HSL()
+}
+
+// HSV returns [HSV] representation of color (hue, saturation, value).
+func (c Lab) HSV() *HSV {
+	return c.XYZ().HSV()
+}
+
+// RGB returns [RGB] representation of color (red, green, blue).
+func (c Lab) RGB() *RGB {
+	return c.XYZ().RGB()
+}
+
 // XYZWithReferenceWhite returns [XYZ] representation of color.
 //
 // [Lab.White] is used as a reference white.
@@ -39,4 +66,9 @@ func (c Lab) XYZ() *XYZ {
 	)
 
 	return &XYZ{x, y, z}
+}
+
+// String returns string representation of [Lab].
+func (c Lab) String() string {
+	return fmt.Sprintf("lab(%.4f, %.4f, %.4f)", c.L, c.A, c.B)
 }
