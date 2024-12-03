@@ -1,5 +1,7 @@
 package color
 
+import "math"
+
 // Default reference white constants. These values determine target white that
 // represents "white".
 const (
@@ -41,6 +43,35 @@ func (c XYZ) Lab() *Lab {
 		Y: ReferenceWhiteY,
 		Z: ReferenceWhiteZ,
 	})
+}
+
+// RGB returns [RGB] representation of color (red, green, blue).
+func (c XYZ) RGB() *RGB {
+	// Convert XYZ to sRGB in linear form.
+	// NOTE: See links below for convertion matrix:
+	//   - http://www.brucelindbloom.com/index.html?Eqn_XYZ_to_RGB.html
+	//   - https://www.oceanopticsbook.info/view/photometry-and-visibility/from-xyz-to-rgb
+	var (
+		rVec = 3.2404542*c.X - 1.5371385*c.Y - 0.4985314*c.Z
+		gVec = -0.9692660*c.X + 1.8760108*c.Y + 0.0415560*c.Z
+		bVec = 0.0556434*c.X - 0.2040259*c.Y + 1.0572252*c.Z
+	)
+
+	// Convert from linear form to sRGB.
+	var (
+		sR = linearToSRGB(rVec / 100.0)
+		sG = linearToSRGB(gVec / 100.0)
+		sB = linearToSRGB(bVec / 100.0)
+	)
+
+	// Convert to RGB.
+	var (
+		r = uint8(math.Round(sR * 255))
+		g = uint8(math.Round(sG * 255))
+		b = uint8(math.Round(sB * 255))
+	)
+
+	return &RGB{r, g, b}
 }
 
 // LabWithReferenceWhite returns [Lab] representation of color, allowing to

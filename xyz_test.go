@@ -7,6 +7,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestXYZ(t *testing.T) {
+	assert.Implements(t, (*interface {
+		Lab() *color.Lab
+		RGB() *color.RGB
+	})(nil), color.XYZ{})
+}
+
 func TestXYZ_Lab(t *testing.T) {
 	defaultWhite := &color.XYZ{
 		X: color.ReferenceWhiteX,
@@ -65,5 +72,31 @@ func TestXYZ_LabWithReferenceWhite(t *testing.T) {
 		assert.InDelta(t, c.expected.L, actual.L, 0.05)
 		assert.InDelta(t, c.expected.A, actual.A, 0.05)
 		assert.InDelta(t, c.expected.B, actual.B, 0.05)
+	}
+}
+
+func TestXYZ_RGB(t *testing.T) {
+	cases := []struct {
+		color    *color.XYZ
+		expected *color.RGB
+	}{
+		{color.DefaultReferenceWhite, &color.RGB{255, 255, 255}},
+		{&color.XYZ{41.246, 21.267, 1.933}, &color.RGB{255, 0, 0}},
+		{&color.XYZ{35.758, 71.515, 11.919}, &color.RGB{0, 255, 0}},
+		{&color.XYZ{18.044, 7.217, 95.030}, &color.RGB{0, 0, 255}},
+		{&color.XYZ{77.003, 92.783, 13.853}, &color.RGB{255, 255, 0}},
+		{&color.XYZ{59.289, 28.485, 96.964}, &color.RGB{255, 0, 255}},
+		{&color.XYZ{53.801, 78.733, 106.950}, &color.RGB{0, 255, 255}},
+		{&color.XYZ{95.047, 100.000, 108.883}, &color.RGB{255, 255, 255}},
+		{&color.XYZ{21.461, 30.457, 18.932}, &color.RGB{102, 164, 108}},
+		{&color.XYZ{26.232, 19.865, 34.794}, &color.RGB{164, 102, 158}},
+		{&color.XYZ{24.425, 22.286, 15.583}, &color.RGB{164, 120, 102}},
+		{&color.XYZ{84.203, 88.676, 97.457}, &color.RGB{241, 242, 243}},
+		{&color.XYZ{46.053, 38.455, 9.271}, &color.RGB{238, 144, 60}},
+	}
+
+	for _, c := range cases {
+		actual := c.color.RGB()
+		assert.Equal(t, c.expected, actual)
 	}
 }

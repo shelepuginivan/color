@@ -14,6 +14,18 @@ func srgbToLinear(c float64) float64 {
 	return math.Pow(base, 2.4)
 }
 
+// linearToSRGB converts linear representation of color to its channel value in
+// normalized form. Defined in [WCAG 2.2]
+//
+// [WCAG 2.2]: https://www.w3.org/TR/WCAG/#dfn-relative-luminance
+func linearToSRGB(c float64) float64 {
+	if c <= 0.0031308 {
+		return c * 12.92
+	}
+
+	return 1.055*math.Pow(c, 1.0/2.4) - 0.055
+}
+
 // xyzValToLabF converts [XYZ] value X, Y, and Z to [Lab] f_x, f_y, and f_z
 // respectively.
 //
