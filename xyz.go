@@ -120,3 +120,14 @@ func (c XYZ) LabWithReferenceWhite(white *XYZ) *Lab {
 func (c XYZ) String() string {
 	return fmt.Sprintf("xyz(%.4f, %.4f, %.4f)", c.X, c.Y, c.Z)
 }
+
+// Edit allows in-place modification of the [XYZ] color instance using the
+// provided editing function.
+//
+// The returned value is a pointer to the same instance of [XYZ], so it should
+// not be used to assign values to other variables. It is intended for method
+// chaining.
+func (c *XYZ) Edit(editfn func(c *XYZ)) *XYZ {
+	editfn(c)
+	return c
+}
