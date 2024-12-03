@@ -7,25 +7,25 @@ type Lab struct {
 	L float64 // L represents lightness of the color.
 	A float64 // A represents the green-red component of the color.
 	B float64 // B represents the yellow-blue component of the color.
+
+	White *XYZ // Reference white.
 }
 
-// XYZ returns [XYZ] representation of color (long wavelengths, brightness,
-// short wavelengths).
+// NewLab returns a new instance of [Lab] with the default reference white.
+func NewLab(l, a, b float64) *Lab {
+	return &Lab{l, a, b, DefaultReferenceWhite}
+}
+
+// NewLabWithReferenceWhite returns a new instance of [Lab] and allows to set a
+// custom reference white.
+func NewLabWithReferenceWhite(l, a, b float64, white *XYZ) *Lab {
+	return &Lab{l, a, b, white}
+}
+
+// XYZWithReferenceWhite returns [XYZ] representation of color.
 //
-// (95.047, 100.000, 108.883) is used as a reference white. Use
-// [Lab.XYZWithReferenceWhite] to specify a different reference white.
+// [Lab.White] is used as a reference white.
 func (c Lab) XYZ() *XYZ {
-	// Observer = 2°, Illuminant = D65.
-	return c.XYZWithReferenceWhite(&XYZ{
-		X: ReferenceWhiteX,
-		Y: ReferenceWhiteY,
-		Z: ReferenceWhiteZ,
-	})
-}
-
-// XYZWithReferenceWhite returns [XYZ] representation of color, allowing to
-// specify reference white color.
-func (c Lab) XYZWithReferenceWhite(white *XYZ) *XYZ {
 	var (
 		fy = (c.L + 16) / 116
 		fx = c.A/500 + fy
@@ -33,14 +33,10 @@ func (c Lab) XYZWithReferenceWhite(white *XYZ) *XYZ {
 	)
 
 	var (
-		x = labFToXyzVal(fx) * white.X
-		y = labFToXyzVal(fy) * white.Y
-		z = labFToXyzVal(fz) * white.Z
+		x = labFToXyzVal(fx) * c.White.X
+		y = labFToXyzVal(fy) * c.White.Y
+		z = labFToXyzVal(fz) * c.White.Z
 	)
 
-	return &XYZ{
-		X: x,
-		Y: y,
-		Z: z,
-	}
+	return &XYZ{x, y, z}
 }

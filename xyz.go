@@ -8,6 +8,13 @@ const (
 	ReferenceWhiteZ = 108.883
 )
 
+// Default reference white.
+var DefaultReferenceWhite = &XYZ{
+	X: ReferenceWhiteX,
+	Y: ReferenceWhiteY,
+	Z: ReferenceWhiteZ,
+}
+
 // XYZ represents a color in [XYZ] color space.
 //
 // [XYZ]: https://en.wikipedia.org/wiki/CIE_1931_color_space
@@ -15,6 +22,11 @@ type XYZ struct {
 	X float64 // X represents a combination of long wavelengths (red).
 	Y float64 // Y corresponds to the luminance or brightness of the color.
 	Z float64 // Z captures the short wavelengths (blue).
+}
+
+// NewXYZ returns a new instance of [XYZ].
+func NewXYZ(x, y, z float64) *XYZ {
+	return &XYZ{x, y, z}
 }
 
 // Lab returns [Lab] representation of color (lightness, red-green,
@@ -40,9 +52,11 @@ func (c XYZ) LabWithReferenceWhite(white *XYZ) *Lab {
 		fz = xyzValToLabF(c.Z / white.Z)
 	)
 
-	return &Lab{
-		L: 116*fy - 16,
-		A: 500 * (fx - fy),
-		B: 200 * (fy - fz),
-	}
+	var (
+		l = 116*fy - 16
+		a = 500 * (fx - fy)
+		b = 200 * (fy - fz)
+	)
+
+	return &Lab{l, a, b, white}
 }
