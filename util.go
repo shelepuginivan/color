@@ -16,10 +16,26 @@ func srgbToLinear(c float64) float64 {
 
 // xyzValToLabF converts [XYZ] value X, Y, and Z to [Lab] f_x, f_y, and f_z
 // respectively.
+//
+// NOTE: http://www.brucelindbloom.com/index.html?Eqn_XYZ_to_Lab.html
 func xyzValToLabF(c float64) float64 {
 	if c > 0.008856 {
 		return math.Pow(c, 1.0/3.0)
 	}
 
 	return (903.3*c + 16) / 116
+}
+
+// labFToXyzVal converts [Lab] f_x, f_y, and f_z to [XYZ] X, Y, and Z
+// respectively.
+//
+// NOTE: http://www.brucelindbloom.com/index.html?Eqn_Lab_to_XYZ.html
+func labFToXyzVal(c float64) float64 {
+	c3 := math.Pow(c, 3.0)
+
+	if c3 > 0.008856 {
+		return c3
+	}
+
+	return (116*c - 16) / 903.3
 }
