@@ -156,6 +156,16 @@ func (c RGB) XYZ() *XYZ {
 	return &XYZ{X, Y, Z}
 }
 
+// Lab returns [Lab] representation of color (lightness, red-green,
+// yellow-blue).
+//
+// (95.047, 100.000, 108.883) is used as a reference white. Convert [RGB] to
+// [XYZ] with [RGB.XYZ] and use [XYZ.LabWithReferenceWhite] to specify a
+// different reference white.
+func (c RGB) Lab() *Lab {
+	return c.XYZ().Lab()
+}
+
 // String returns string representation of [RGB].
 func (c RGB) String() string {
 	return fmt.Sprintf("rgb(%d, %d, %d)", c.R, c.G, c.B)

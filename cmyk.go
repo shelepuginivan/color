@@ -76,6 +76,16 @@ func (c CMYK) XYZ() *XYZ {
 	return c.RGB().XYZ()
 }
 
+// Lab returns [Lab] representation of color (lightness, red-green,
+// yellow-blue).
+//
+// (95.047, 100.000, 108.883) is used as a reference white. Convert [CMYK] to
+// [XYZ] with [CMYK.XYZ] and use [XYZ.LabWithReferenceWhite] to specify a
+// different reference white.
+func (c CMYK) Lab() *Lab {
+	return c.XYZ().Lab()
+}
+
 // Edit allows in-place modification of the [CMYK] color instance using the
 // provided editing function.
 //

@@ -13,6 +13,7 @@ func TestHSL(t *testing.T) {
 		CMYK() *color.CMYK
 		Hex() string
 		HSV() *color.HSV
+		Lab() *color.Lab
 		RGB() *color.RGB
 		XYZ() *color.XYZ
 

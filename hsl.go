@@ -105,6 +105,16 @@ func (c HSL) XYZ() *XYZ {
 	return c.RGB().XYZ()
 }
 
+// Lab returns [Lab] representation of color (lightness, red-green,
+// yellow-blue).
+//
+// (95.047, 100.000, 108.883) is used as a reference white. Convert [HSL] to
+// [XYZ] with [HSL.XYZ] and use [XYZ.LabWithReferenceWhite] to specify a
+// different reference white.
+func (c HSL) Lab() *Lab {
+	return c.XYZ().Lab()
+}
+
 // String returns string representation of [HSL].
 func (c HSL) String() string {
 	return fmt.Sprintf("hsl(%d, %d%%, %d%%)", c.H, c.S, c.L)

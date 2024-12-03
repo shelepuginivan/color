@@ -13,6 +13,7 @@ func TestCMYK(t *testing.T) {
 		Hex() string
 		HSL() *color.HSL
 		HSV() *color.HSV
+		Lab() *color.Lab
 		RGB() *color.RGB
 		XYZ() *color.XYZ
 

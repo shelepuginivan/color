@@ -116,6 +116,16 @@ func (c HSV) XYZ() *XYZ {
 	return c.RGB().XYZ()
 }
 
+// Lab returns [Lab] representation of color (lightness, red-green,
+// yellow-blue).
+//
+// (95.047, 100.000, 108.883) is used as a reference white. Convert [HSV] to
+// [XYZ] with [HSV.XYZ] and use [XYZ.LabWithReferenceWhite] to specify a
+// different reference white.
+func (c HSV) Lab() *Lab {
+	return c.XYZ().Lab()
+}
+
 // String returns string representation of [HSV].
 func (c HSV) String() string {
 	return fmt.Sprintf("hsv(%d, %d%%, %d%%)", c.H, c.S, c.V)
