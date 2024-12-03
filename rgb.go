@@ -149,11 +149,13 @@ func (c RGB) XYZ() *XYZ {
 		bVec = srgbToLinear(b) * 100.0
 	)
 
-	X := rVec*0.4124564 + gVec*0.3575761 + bVec*0.1804375
-	Y := rVec*0.2126729 + gVec*0.7151522 + bVec*0.0721750
-	Z := rVec*0.0193339 + gVec*0.1191920 + bVec*0.9503041
+	var (
+		x = rVec*0.4124564 + gVec*0.3575761 + bVec*0.1804375
+		y = rVec*0.2126729 + gVec*0.7151522 + bVec*0.0721750
+		z = rVec*0.0193339 + gVec*0.1191920 + bVec*0.9503041
+	)
 
-	return &XYZ{X, Y, Z}
+	return &XYZ{x, y, z}
 }
 
 // Lab returns [Lab] representation of color (lightness, red-green,
