@@ -1,6 +1,9 @@
 package color
 
-import "math"
+import (
+	"fmt"
+	"math"
+)
 
 // Default reference white constants. These values determine target white that
 // represents "white".
@@ -31,18 +34,25 @@ func NewXYZ(x, y, z float64) *XYZ {
 	return &XYZ{x, y, z}
 }
 
-// Lab returns [Lab] representation of color (lightness, red-green,
-// yellow-blue).
-//
-// (95.047, 100.000, 108.883) is used as a reference white. Use
-// [XYZ.LabWithReferenceWhite] to specify a different reference white.
-func (c XYZ) Lab() *Lab {
-	// Observer = 2°, Illuminant = D65.
-	return c.LabWithReferenceWhite(&XYZ{
-		X: ReferenceWhiteX,
-		Y: ReferenceWhiteY,
-		Z: ReferenceWhiteZ,
-	})
+// CMYK returns [CMYK] representation of color (cyan, magenta, yellow, key).
+func (c XYZ) CMYK() *CMYK {
+	return c.RGB().CMYK()
+}
+
+// Hex returns hexadecimal representation of color.
+func (c XYZ) Hex() string {
+	rgb := c.RGB()
+	return fmt.Sprintf("#%02x%02x%02x", rgb.R, rgb.G, rgb.B)
+}
+
+// HSL returns [HSL] representation of color (hue, saturation, lightness).
+func (c XYZ) HSL() *HSL {
+	return c.RGB().HSL()
+}
+
+// HSV returns [HSV] representation of color (hue, saturation, value).
+func (c XYZ) HSV() *HSV {
+	return c.RGB().HSV()
 }
 
 // RGB returns [RGB] representation of color (red, green, blue).
@@ -74,6 +84,20 @@ func (c XYZ) RGB() *RGB {
 	return &RGB{r, g, b}
 }
 
+// Lab returns [Lab] representation of color (lightness, red-green,
+// yellow-blue).
+//
+// (95.047, 100.000, 108.883) is used as a reference white. Use
+// [XYZ.LabWithReferenceWhite] to specify a different reference white.
+func (c XYZ) Lab() *Lab {
+	// Observer = 2°, Illuminant = D65.
+	return c.LabWithReferenceWhite(&XYZ{
+		X: ReferenceWhiteX,
+		Y: ReferenceWhiteY,
+		Z: ReferenceWhiteZ,
+	})
+}
+
 // LabWithReferenceWhite returns [Lab] representation of color, allowing to
 // specify reference white color.
 func (c XYZ) LabWithReferenceWhite(white *XYZ) *Lab {
@@ -90,4 +114,9 @@ func (c XYZ) LabWithReferenceWhite(white *XYZ) *Lab {
 	)
 
 	return &Lab{l, a, b, white}
+}
+
+// String returns string representation of [XYZ].
+func (c XYZ) String() string {
+	return fmt.Sprintf("xyz(%.4f, %.4f, %.4f)", c.X, c.Y, c.Z)
 }

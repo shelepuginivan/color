@@ -9,8 +9,14 @@ import (
 
 func TestXYZ(t *testing.T) {
 	assert.Implements(t, (*interface {
+		CMYK() *color.CMYK
 		Lab() *color.Lab
 		RGB() *color.RGB
+		Hex() string
+		HSL() *color.HSL
+		HSV() *color.HSV
+
+		String() string
 	})(nil), color.XYZ{})
 }
 
