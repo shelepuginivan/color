@@ -1,6 +1,8 @@
 package color_test
 
 import (
+	"fmt"
+	"math/rand"
 	"testing"
 
 	"github.com/shelepuginivan/color"
@@ -10,13 +12,14 @@ import (
 func TestXYZ(t *testing.T) {
 	assert.Implements(t, (*interface {
 		CMYK() *color.CMYK
-		Lab() *color.Lab
+		Lab() *color.Lab                             // Tested
+		LabWithReferenceWhite(*color.XYZ) *color.Lab // Tested
 		RGB() *color.RGB
 		Hex() string
 		HSL() *color.HSL
 		HSV() *color.HSV
 
-		String() string
+		String() string // Tested
 	})(nil), color.XYZ{})
 }
 
@@ -104,5 +107,22 @@ func TestXYZ_RGB(t *testing.T) {
 	for _, c := range cases {
 		actual := c.color.RGB()
 		assert.Equal(t, c.expected, actual)
+	}
+}
+
+func TestXYZ_String(t *testing.T) {
+	for range 1000 {
+		var (
+			x = rand.Float64() * 100
+			y = rand.Float64() * 100
+			z = rand.Float64() * 100
+		)
+
+		var (
+			expected = fmt.Sprintf("xyz(%.4f, %.4f, %.4f)", x, y, z)
+			actual   = color.NewXYZ(x, y, z).String()
+		)
+
+		assert.Equal(t, expected, actual)
 	}
 }

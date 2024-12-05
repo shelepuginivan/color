@@ -11,12 +11,12 @@ import (
 
 func TestRGB(t *testing.T) {
 	assert.Implements(t, (*interface {
-		CMYK() *color.CMYK
-		Hex() string
-		HSL() *color.HSL
-		HSV() *color.HSV
+		CMYK() *color.CMYK // Tested
+		Hex() string       // Tested
+		HSL() *color.HSL   // Tested
+		HSV() *color.HSV   // Tested
 		Lab() *color.Lab
-		XYZ() *color.XYZ
+		XYZ() *color.XYZ // Tested
 
 		String() string
 	})(nil), color.RGB{})

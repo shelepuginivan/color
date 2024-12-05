@@ -116,11 +116,6 @@ func (c XYZ) LabWithReferenceWhite(white *XYZ) *Lab {
 	return &Lab{l, a, b, white}
 }
 
-// String returns string representation of [XYZ].
-func (c XYZ) String() string {
-	return fmt.Sprintf("xyz(%.4f, %.4f, %.4f)", c.X, c.Y, c.Z)
-}
-
 // Edit allows in-place modification of the [XYZ] color instance using the
 // provided editing function.
 //
@@ -130,4 +125,9 @@ func (c XYZ) String() string {
 func (c *XYZ) Edit(editfn func(c *XYZ)) *XYZ {
 	editfn(c)
 	return c
+}
+
+// String returns string representation of [XYZ].
+func (c XYZ) String() string {
+	return fmt.Sprintf("xyz(%.4f, %.4f, %.4f)", c.X, c.Y, c.Z)
 }

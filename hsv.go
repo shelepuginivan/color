@@ -126,11 +126,6 @@ func (c HSV) Lab() *Lab {
 	return c.XYZ().Lab()
 }
 
-// String returns string representation of [HSV].
-func (c HSV) String() string {
-	return fmt.Sprintf("hsv(%d, %d%%, %d%%)", c.H, c.S, c.V)
-}
-
 // Edit allows in-place modification of the [HSV] color instance using the
 // provided editing function.
 //
@@ -140,4 +135,9 @@ func (c HSV) String() string {
 func (c *HSV) Edit(editfn func(c *HSV)) *HSV {
 	editfn(c)
 	return c
+}
+
+// String returns string representation of [HSV].
+func (c HSV) String() string {
+	return fmt.Sprintf("hsv(%d, %d%%, %d%%)", c.H, c.S, c.V)
 }

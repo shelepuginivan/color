@@ -1,6 +1,8 @@
 package color_test
 
 import (
+	"fmt"
+	"math/rand"
 	"testing"
 
 	"github.com/shelepuginivan/color"
@@ -16,6 +18,23 @@ func TestLab(t *testing.T) {
 		RGB() *color.RGB
 		XYZ() *color.XYZ
 
-		String() string
+		String() string // Tested
 	})(nil), color.Lab{})
+}
+
+func TestLab_String(t *testing.T) {
+	for range 1000 {
+		var (
+			l = rand.Float64() * 100
+			a = rand.Float64() * 100
+			b = rand.Float64() * 100
+		)
+
+		var (
+			expected = fmt.Sprintf("lab(%.4f, %.4f, %.4f)", l, a, b)
+			actual   = color.NewLab(l, a, b).String()
+		)
+
+		assert.Equal(t, expected, actual)
+	}
 }

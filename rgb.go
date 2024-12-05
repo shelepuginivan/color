@@ -168,11 +168,6 @@ func (c RGB) Lab() *Lab {
 	return c.XYZ().Lab()
 }
 
-// String returns string representation of [RGB].
-func (c RGB) String() string {
-	return fmt.Sprintf("rgb(%d, %d, %d)", c.R, c.G, c.B)
-}
-
 // Edit allows in-place modification of the [RGB] color instance using the
 // provided editing function.
 //
@@ -182,4 +177,9 @@ func (c RGB) String() string {
 func (c *RGB) Edit(editfn func(c *RGB)) *RGB {
 	editfn(c)
 	return c
+}
+
+// String returns string representation of [RGB].
+func (c RGB) String() string {
+	return fmt.Sprintf("rgb(%d, %d, %d)", c.R, c.G, c.B)
 }

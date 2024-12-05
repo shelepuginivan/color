@@ -65,11 +65,6 @@ func (c CMYK) RGB() *RGB {
 	}
 }
 
-// String returns string representation of [CMYK].
-func (c CMYK) String() string {
-	return fmt.Sprintf("cmyk(%d%%, %d%%, %d%%, %d%%)", c.C, c.M, c.Y, c.K)
-}
-
 // XYZ returns [XYZ] representation of color (long wavelengths, brightness,
 // short wavelengths).
 func (c CMYK) XYZ() *XYZ {
@@ -95,4 +90,9 @@ func (c CMYK) Lab() *Lab {
 func (c *CMYK) Edit(editfn func(c *CMYK)) *CMYK {
 	editfn(c)
 	return c
+}
+
+// String returns string representation of [CMYK].
+func (c CMYK) String() string {
+	return fmt.Sprintf("cmyk(%d%%, %d%%, %d%%, %d%%)", c.C, c.M, c.Y, c.K)
 }

@@ -115,11 +115,6 @@ func (c HSL) Lab() *Lab {
 	return c.XYZ().Lab()
 }
 
-// String returns string representation of [HSL].
-func (c HSL) String() string {
-	return fmt.Sprintf("hsl(%d, %d%%, %d%%)", c.H, c.S, c.L)
-}
-
 // Edit allows in-place modification of the [HSL] color instance using the
 // provided editing function.
 //
@@ -129,6 +124,11 @@ func (c HSL) String() string {
 func (c *HSL) Edit(editfn func(c *HSL)) *HSL {
 	editfn(c)
 	return c
+}
+
+// String returns string representation of [HSL].
+func (c HSL) String() string {
+	return fmt.Sprintf("hsl(%d, %d%%, %d%%)", c.H, c.S, c.L)
 }
 
 // hueToRGB calculates the RGB value for a given hue component. It takes three

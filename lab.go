@@ -68,11 +68,6 @@ func (c Lab) XYZ() *XYZ {
 	return &XYZ{x, y, z}
 }
 
-// String returns string representation of [Lab].
-func (c Lab) String() string {
-	return fmt.Sprintf("lab(%.4f, %.4f, %.4f)", c.L, c.A, c.B)
-}
-
 // Edit allows in-place modification of the [Lab] color instance using the
 // provided editing function.
 //
@@ -82,4 +77,9 @@ func (c Lab) String() string {
 func (c *Lab) Edit(editfn func(c *Lab)) *Lab {
 	editfn(c)
 	return c
+}
+
+// String returns string representation of [Lab].
+func (c Lab) String() string {
+	return fmt.Sprintf("lab(%.4f, %.4f, %.4f)", c.L, c.A, c.B)
 }

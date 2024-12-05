@@ -2,6 +2,7 @@ package color_test
 
 import (
 	"fmt"
+	"math/rand"
 	"testing"
 
 	"github.com/shelepuginivan/color"
@@ -12,9 +13,9 @@ func TestHSL(t *testing.T) {
 	assert.Implements(t, (*interface {
 		CMYK() *color.CMYK
 		Hex() string
-		HSV() *color.HSV
+		HSV() *color.HSV // Tested
 		Lab() *color.Lab
-		RGB() *color.RGB
+		RGB() *color.RGB // Tested
 		XYZ() *color.XYZ
 
 		String() string
@@ -125,4 +126,21 @@ func ExampleHSL_Edit() {
 	fmt.Println(cyan.Edit(func(c *color.HSL) {
 		c.S = 30
 	}).RGB()) // Output: rgb(89, 166, 166)
+}
+
+func TestHSL_String(t *testing.T) {
+	for range 1000 {
+		var (
+			h = rand.Intn(360)
+			s = rand.Intn(101)
+			l = rand.Intn(101)
+		)
+
+		var (
+			expected = fmt.Sprintf("hsl(%d, %d%%, %d%%)", h, s, l)
+			actual   = color.NewHSL(h, s, l).String()
+		)
+
+		assert.Equal(t, expected, actual)
+	}
 }
