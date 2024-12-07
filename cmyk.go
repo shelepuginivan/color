@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/shelepuginivan/color/internal/normalize"
+	"github.com/shelepuginivan/color/internal/percents"
 )
 
 // CMYK represents a color in [CMYK] color space.
@@ -20,10 +20,10 @@ type CMYK struct {
 // NewCMYK returns a new instance of [CMYK].
 func NewCMYK(c, m, y, k int) *CMYK {
 	return &CMYK{
-		C: normalize.Percents(c),
-		M: normalize.Percents(m),
-		Y: normalize.Percents(y),
-		K: normalize.Percents(k),
+		C: percents.Normalize(c),
+		M: percents.Normalize(m),
+		Y: percents.Normalize(y),
+		K: percents.Normalize(k),
 	}
 }
 
@@ -46,10 +46,10 @@ func (c CMYK) HSV() *HSV {
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c CMYK) RGB() *RGB {
 	var (
-		cyan    = normalize.PercentsFloat(c.C)
-		magenta = normalize.PercentsFloat(c.M)
-		yellow  = normalize.PercentsFloat(c.Y)
-		key     = normalize.PercentsFloat(c.K)
+		cyan    = percents.ToFloat(c.C)
+		magenta = percents.ToFloat(c.M)
+		yellow  = percents.ToFloat(c.Y)
+		key     = percents.ToFloat(c.K)
 	)
 
 	var (

@@ -4,7 +4,7 @@ import (
 	"math"
 
 	"github.com/shelepuginivan/color/internal/degrees"
-	"github.com/shelepuginivan/color/internal/normalize"
+	"github.com/shelepuginivan/color/internal/percents"
 )
 
 // MixCMYK calculates the average color in CMYK colorspace from an arbitrary
@@ -20,17 +20,17 @@ func MixCMYK(colors ...*CMYK) *CMYK {
 	)
 
 	for _, color := range colors {
-		c += normalize.PercentsFloat(color.C)
-		m += normalize.PercentsFloat(color.M)
-		y += normalize.PercentsFloat(color.Y)
-		k += normalize.PercentsFloat(color.K)
+		c += percents.ToFloat(color.C)
+		m += percents.ToFloat(color.M)
+		y += percents.ToFloat(color.Y)
+		k += percents.ToFloat(color.K)
 	}
 
 	return &CMYK{
-		C: normalize.FloatPercents(c / total),
-		M: normalize.FloatPercents(m / total),
-		Y: normalize.FloatPercents(y / total),
-		K: normalize.FloatPercents(k / total),
+		C: percents.FromFloat(c / total),
+		M: percents.FromFloat(m / total),
+		Y: percents.FromFloat(y / total),
+		K: percents.FromFloat(k / total),
 	}
 }
 

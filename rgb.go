@@ -5,7 +5,7 @@ import (
 	"math"
 
 	"github.com/shelepuginivan/color/internal/degrees"
-	"github.com/shelepuginivan/color/internal/normalize"
+	"github.com/shelepuginivan/color/internal/percents"
 )
 
 // RGB represents a color in [RGB] color space.
@@ -92,8 +92,8 @@ func (c RGB) HSL() *HSL {
 
 	return &HSL{
 		H: degrees.Normalize(int(math.Round(h))),
-		S: normalize.FloatPercents(s),
-		L: normalize.FloatPercents(l),
+		S: percents.FromFloat(s),
+		L: percents.FromFloat(l),
 	}
 }
 
@@ -128,8 +128,8 @@ func (c RGB) HSV() *HSV {
 
 	return &HSV{
 		H: degrees.Normalize(int(math.Round(h))),
-		S: normalize.FloatPercents(s),
-		V: normalize.FloatPercents(v),
+		S: percents.FromFloat(s),
+		V: percents.FromFloat(v),
 	}
 }
 

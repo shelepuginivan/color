@@ -5,7 +5,7 @@ import (
 	"math"
 
 	"github.com/shelepuginivan/color/internal/degrees"
-	"github.com/shelepuginivan/color/internal/normalize"
+	"github.com/shelepuginivan/color/internal/percents"
 )
 
 // [HSL] representation of color.
@@ -21,8 +21,8 @@ type HSL struct {
 func NewHSL(h, s, l int) *HSL {
 	return &HSL{
 		H: degrees.Normalize(h),
-		S: normalize.Percents(s),
-		L: normalize.Percents(l),
+		S: percents.Normalize(s),
+		L: percents.Normalize(l),
 	}
 }
 
@@ -41,8 +41,8 @@ func (c HSL) Hex() string {
 func (c HSL) HSV() *HSV {
 	// Value normalization.
 	var (
-		s = normalize.PercentsFloat(c.S)
-		l = normalize.PercentsFloat(c.L)
+		s = percents.ToFloat(c.S)
+		l = percents.ToFloat(c.L)
 	)
 
 	// H_V = H_L
@@ -60,8 +60,8 @@ func (c HSL) HSV() *HSV {
 
 	return &HSV{
 		H: hue,
-		S: normalize.FloatPercents(saturation),
-		V: normalize.FloatPercents(value),
+		S: percents.FromFloat(saturation),
+		V: percents.FromFloat(value),
 	}
 }
 
@@ -69,8 +69,8 @@ func (c HSL) HSV() *HSV {
 func (c HSL) RGB() *RGB {
 	var (
 		h = degrees.ToFloat(c.H)
-		s = normalize.PercentsFloat(c.S)
-		l = normalize.PercentsFloat(c.L)
+		s = percents.ToFloat(c.S)
+		l = percents.ToFloat(c.L)
 	)
 
 	// The default case is when the color is achromatic.

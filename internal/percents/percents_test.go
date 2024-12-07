@@ -1,13 +1,13 @@
-package normalize_test
+package percents_test
 
 import (
 	"testing"
 
-	"github.com/shelepuginivan/color/internal/normalize"
+	"github.com/shelepuginivan/color/internal/percents"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPercents(t *testing.T) {
+func TestNormalize(t *testing.T) {
 	cases := []struct {
 		value    int
 		expected int
@@ -21,12 +21,12 @@ func TestPercents(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		actual := normalize.Percents(c.value)
+		actual := percents.Normalize(c.value)
 		assert.Equal(t, c.expected, actual)
 	}
 }
 
-func TestPercentsFloat(t *testing.T) {
+func TestToFloat(t *testing.T) {
 	cases := []struct {
 		value    int
 		expected float64
@@ -43,12 +43,12 @@ func TestPercentsFloat(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		actual := normalize.PercentsFloat(c.value)
+		actual := percents.ToFloat(c.value)
 		assert.Equal(t, c.expected, actual)
 	}
 }
 
-func TestFloatPercents(t *testing.T) {
+func TestFromFloat(t *testing.T) {
 	cases := []struct {
 		value    float64
 		expected int
@@ -65,7 +65,7 @@ func TestFloatPercents(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		actual := normalize.FloatPercents(c.value)
+		actual := percents.FromFloat(c.value)
 		assert.Equal(t, c.expected, actual)
 	}
 }

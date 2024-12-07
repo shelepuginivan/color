@@ -5,7 +5,7 @@ import (
 	"math"
 
 	"github.com/shelepuginivan/color/internal/degrees"
-	"github.com/shelepuginivan/color/internal/normalize"
+	"github.com/shelepuginivan/color/internal/percents"
 )
 
 // [HSV] representation of color.
@@ -21,8 +21,8 @@ type HSV struct {
 func NewHSV(h, s, v int) *HSV {
 	return &HSV{
 		H: degrees.Normalize(h),
-		S: normalize.Percents(s),
-		V: normalize.Percents(v),
+		S: percents.Normalize(s),
+		V: percents.Normalize(v),
 	}
 }
 
@@ -41,8 +41,8 @@ func (c HSV) Hex() string {
 func (c HSV) HSL() *HSL {
 	// Value normalization.
 	var (
-		s = normalize.PercentsFloat(c.S)
-		v = normalize.PercentsFloat(c.V)
+		s = percents.ToFloat(c.S)
+		v = percents.ToFloat(c.V)
 	)
 
 	// H_L = H_V
@@ -60,16 +60,16 @@ func (c HSV) HSL() *HSL {
 
 	return &HSL{
 		H: hue,
-		S: normalize.FloatPercents(saturation),
-		L: normalize.FloatPercents(lightness),
+		S: percents.FromFloat(saturation),
+		L: percents.FromFloat(lightness),
 	}
 }
 
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c HSV) RGB() *RGB {
 	var (
-		s = normalize.PercentsFloat(c.S)
-		v = normalize.PercentsFloat(c.V)
+		s = percents.ToFloat(c.S)
+		v = percents.ToFloat(c.V)
 	)
 
 	// Helper hue value that determines position on color wheel.
