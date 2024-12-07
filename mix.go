@@ -84,11 +84,11 @@ func MixHSL(colors ...Color) *HSL {
 // MixLab calculates the average color in Lab colorspace from an arbitrary
 // number of colors.
 //
-// (95.047, 100.000, 108.883) is set as the reference white of the resulting
-// color. Use [Lab.SetReferenceWhite] to set a different reference white.
+// [D65] is set as the reference white of the resulting color. Use
+// [Lab.SetWhitepoint] to set a different reference white.
 func MixLab(colors ...Color) *Lab {
 	if len(colors) == 0 {
-		return &Lab{0, 0, 0, DefaultReferenceWhite}
+		return &Lab{0, 0, 0, D65}
 	}
 
 	var (
@@ -101,7 +101,7 @@ func MixLab(colors ...Color) *Lab {
 	for _, color := range colors {
 		lab := color.Lab()
 		norm := &Lab{lab.L, lab.A, lab.B, lab.White}
-		norm.SetReferenceWhite(DefaultReferenceWhite)
+		norm.SetWhitepoint(D65)
 
 		sumL += norm.L
 		sumA += norm.A
@@ -114,7 +114,7 @@ func MixLab(colors ...Color) *Lab {
 		avgB = sumB / total
 	)
 
-	return &Lab{avgL, avgA, avgB, DefaultReferenceWhite}
+	return &Lab{avgL, avgA, avgB, D65}
 }
 
 // MixRGB calculates the average color in RGB colorspace from an arbitrary

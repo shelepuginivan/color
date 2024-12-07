@@ -13,20 +13,21 @@ type Lab struct {
 	White *XYZ // Reference white.
 }
 
-// NewLab returns a new instance of [Lab] with the default reference white.
+// NewLab returns a new instance of [Lab] with the default reference white
+// [D65].
 func NewLab(l, a, b float64) *Lab {
-	return &Lab{l, a, b, DefaultReferenceWhite}
+	return &Lab{l, a, b, D65}
 }
 
-// NewLabWithReferenceWhite returns a new instance of [Lab] and allows to set a
-// custom reference white.
-func NewLabWithReferenceWhite(l, a, b float64, white *XYZ) *Lab {
+// NewLabWithWhitepoint returns a new instance of [Lab] and allows to set a
+// custom whitepoint.
+func NewLabWithWhitepoint(l, a, b float64, white *XYZ) *Lab {
 	return &Lab{l, a, b, white}
 }
 
-// SetReferenceWhite sets [Lab] reference white.
-func (c *Lab) SetReferenceWhite(white *XYZ) *Lab {
-	color := c.XYZ().LabWithReferenceWhite(white)
+// SetWhitepoint sets [Lab] reference white.
+func (c *Lab) SetWhitepoint(white *XYZ) *Lab {
+	color := c.XYZ().LabWithWhitepoint(white)
 
 	c.L = color.L
 	c.A = color.A

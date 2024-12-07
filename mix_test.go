@@ -106,7 +106,7 @@ func TestMixHSL(t *testing.T) {
 }
 
 func TestMixLab(t *testing.T) {
-	d := color.DefaultReferenceWhite
+	d := color.D65
 
 	cases := []struct {
 		colors   []color.Color

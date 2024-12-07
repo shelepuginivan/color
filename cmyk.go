@@ -80,9 +80,8 @@ func (c CMYK) XYZ() *XYZ {
 // Lab returns [Lab] representation of color (lightness, red-green,
 // yellow-blue).
 //
-// (95.047, 100.000, 108.883) is used as a reference white. Convert [CMYK] to
-// [XYZ] with [CMYK.XYZ] and use [XYZ.LabWithReferenceWhite] to specify a
-// different reference white.
+// [D65] is used as a reference white. Use [XYZ.LabWithWhitepoint] to specify a
+// different whitepoint.
 func (c CMYK) Lab() *Lab {
 	return c.XYZ().Lab()
 }

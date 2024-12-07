@@ -5,20 +5,35 @@ import (
 	"math"
 )
 
-// Default reference white constants. These values determine target white that
-// represents "white".
-const (
-	ReferenceWhiteX = 95.047
-	ReferenceWhiteY = 100.000
-	ReferenceWhiteZ = 108.883
-)
+// Predefined whitepoints.
+var (
+	// CIE standard illuminant A. Simulates typical, domestic,
+	// tungsten-filament lighting with correlated color temperature of 2856 K.
+	A = &XYZ{1.0985, 1.0000, 0.3558}
 
-// Default reference white.
-var DefaultReferenceWhite = &XYZ{
-	X: ReferenceWhiteX,
-	Y: ReferenceWhiteY,
-	Z: ReferenceWhiteZ,
-}
+	// CIE standard illuminant C. Simulates average or north sky daylight with
+	// correlated color temperature of 6774 K. Deprecated by CIE.
+	C = &XYZ{0.9807, 1.0000, 1.1822}
+
+	// Equal-energy radiator. Useful as a theoretical reference.
+	E = &XYZ{1.0000, 1.0000, 1.0000}
+
+	// CIE standard illuminant D50. Simulates warm daylight at sunrise or
+	// sunset with correlated color temperature of 5003 K. Also known as
+	// horizon light.
+	D50 = &XYZ{0.9642, 1.0000, 0.8251}
+
+	// CIE standard illuminant D55. Simulates mid-morning or mid-afternoon
+	// daylight with correlated color temperature of 5500 K.
+	D55 = &XYZ{0.9568, 1.0000, 0.9214}
+
+	// CIE standard illuminant D65. Simulates noon daylight with correlated
+	// color temperature of 6504 K.
+	D65 = &XYZ{0.9505, 1.0000, 1.0888}
+
+	// Profile Connection Space (PCS) illuminant used in ICC profiles.
+	ICC = &XYZ{0.9642, 1.000, 0.8249}
+)
 
 // XYZ represents a color in [XYZ] color space.
 //
@@ -69,9 +84,9 @@ func (c XYZ) RGB() *RGB {
 
 	// Convert from linear form to sRGB.
 	var (
-		sR = linearToSRGB(rVec / 100.0)
-		sG = linearToSRGB(gVec / 100.0)
-		sB = linearToSRGB(bVec / 100.0)
+		sR = linearToSRGB(rVec)
+		sG = linearToSRGB(gVec)
+		sB = linearToSRGB(bVec)
 	)
 
 	// Convert to RGB.
@@ -87,20 +102,15 @@ func (c XYZ) RGB() *RGB {
 // Lab returns [Lab] representation of color (lightness, red-green,
 // yellow-blue).
 //
-// (95.047, 100.000, 108.883) is used as a reference white. Use
-// [XYZ.LabWithReferenceWhite] to specify a different reference white.
+// [D65] is used as a reference white. Use [XYZ.LabWithWhitepoint] to specify a
+// different whitepoint.
 func (c XYZ) Lab() *Lab {
-	// Observer = 2°, Illuminant = D65.
-	return c.LabWithReferenceWhite(&XYZ{
-		X: ReferenceWhiteX,
-		Y: ReferenceWhiteY,
-		Z: ReferenceWhiteZ,
-	})
+	return c.LabWithWhitepoint(D65)
 }
 
-// LabWithReferenceWhite returns [Lab] representation of color, allowing to
+// LabWithWhitepoint returns [Lab] representation of color, allowing to
 // specify reference white color.
-func (c XYZ) LabWithReferenceWhite(white *XYZ) *Lab {
+func (c XYZ) LabWithWhitepoint(white *XYZ) *Lab {
 	var (
 		fx = xyzValToLabF(c.X / white.X)
 		fy = xyzValToLabF(c.Y / white.Y)
