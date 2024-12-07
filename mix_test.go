@@ -79,6 +79,40 @@ func TestMixHSL(t *testing.T) {
 	}
 }
 
+func TestMixLab(t *testing.T) {
+	d := color.DefaultReferenceWhite
+
+	cases := []struct {
+		colors   []*color.Lab
+		expected *color.Lab
+	}{
+		{
+			[]*color.Lab{},
+			&color.Lab{0, 0, 0, d},
+		},
+		{
+			[]*color.Lab{{39.73, -4.86, -25.62, d}, {23.73, 30.23, -56.88, d}, {57.83, 82.11, -49.95, d}},
+			&color.Lab{40.43, 35.83, -44.15, d},
+		},
+		{
+			[]*color.Lab{{70.13, 32.87, 74.55, d}, {86.30, -8.82, 76.56, d}, {81.03, 18.75, 50.84, d}},
+			&color.Lab{79.15, 14.29, 67.32, d},
+		},
+		{
+			[]*color.Lab{{10.39, 22.23, -43.88, d}, {54.31, 63.08, -23.74, d}, {61.92, 51.14, 68.16, d}, {38.45, -0.82, 37.27, d}},
+			&color.Lab{41.27, 33.91, 9.45, d},
+		},
+	}
+
+	for _, c := range cases {
+		actual := color.MixLab(c.colors...)
+
+		assert.InDelta(t, c.expected.L, actual.L, 0.05)
+		assert.InDelta(t, c.expected.A, actual.A, 0.05)
+		assert.InDelta(t, c.expected.B, actual.B, 0.05)
+	}
+}
+
 func TestMixRGB(t *testing.T) {
 	cases := []struct {
 		colors   []*color.RGB

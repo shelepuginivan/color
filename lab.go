@@ -24,6 +24,17 @@ func NewLabWithReferenceWhite(l, a, b float64, white *XYZ) *Lab {
 	return &Lab{l, a, b, white}
 }
 
+// SetReferenceWhite sets [Lab] reference white.
+func (c *Lab) SetReferenceWhite(white *XYZ) *Lab {
+	color := c.XYZ().LabWithReferenceWhite(white)
+
+	c.L = color.L
+	c.A = color.A
+	c.B = color.B
+
+	return color
+}
+
 // CMYK returns [CMYK] representation of color (cyan, magenta, yellow, key).
 func (c Lab) CMYK() *CMYK {
 	return c.XYZ().CMYK()
