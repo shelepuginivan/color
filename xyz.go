@@ -116,6 +116,12 @@ func (c XYZ) LabWithReferenceWhite(white *XYZ) *Lab {
 	return &Lab{l, a, b, white}
 }
 
+// XYZ returns the color unchanged. This method is required to implement the
+// [Color] interface.
+func (c XYZ) XYZ() *XYZ {
+	return &c
+}
+
 // Edit allows in-place modification of the [XYZ] color instance using the
 // provided editing function.
 //

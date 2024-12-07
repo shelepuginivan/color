@@ -55,6 +55,12 @@ func (c Lab) HSV() *HSV {
 	return c.XYZ().HSV()
 }
 
+// Lab returns the color unchanged. This method is required to implement the
+// [Color] interface.
+func (c Lab) Lab() *Lab {
+	return &c
+}
+
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c Lab) RGB() *RGB {
 	return c.XYZ().RGB()

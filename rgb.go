@@ -169,6 +169,12 @@ func (c RGB) Lab() *Lab {
 	return c.XYZ().Lab()
 }
 
+// RGB returns the color unchanged. This method is required to implement the
+// [Color] interface.
+func (c RGB) RGB() *RGB {
+	return &c
+}
+
 // Edit allows in-place modification of the [RGB] color instance using the
 // provided editing function.
 //

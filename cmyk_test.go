@@ -10,16 +10,7 @@ import (
 )
 
 func TestCMYK(t *testing.T) {
-	assert.Implements(t, (*interface {
-		Hex() string     // Tested
-		HSL() *color.HSL // Tested
-		HSV() *color.HSV
-		Lab() *color.Lab
-		RGB() *color.RGB // Tested
-		XYZ() *color.XYZ
-
-		String() string // Tested
-	})(nil), color.CMYK{})
+	assert.Implements(t, (*color.Color)(nil), color.CMYK{})
 }
 
 func TestCMYK_RGB(t *testing.T) {

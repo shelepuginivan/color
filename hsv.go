@@ -65,6 +65,12 @@ func (c HSV) HSL() *HSL {
 	}
 }
 
+// HSV returns the color unchanged. This method is required to implement the
+// [Color] interface.
+func (c HSV) HSV() *HSV {
+	return &c
+}
+
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c HSV) RGB() *RGB {
 	var (

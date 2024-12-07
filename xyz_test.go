@@ -10,17 +10,7 @@ import (
 )
 
 func TestXYZ(t *testing.T) {
-	assert.Implements(t, (*interface {
-		CMYK() *color.CMYK
-		Lab() *color.Lab                             // Tested
-		LabWithReferenceWhite(*color.XYZ) *color.Lab // Tested
-		RGB() *color.RGB
-		Hex() string
-		HSL() *color.HSL
-		HSV() *color.HSV
-
-		String() string // Tested
-	})(nil), color.XYZ{})
+	assert.Implements(t, (*color.Color)(nil), color.XYZ{})
 }
 
 func TestXYZ_Lab(t *testing.T) {

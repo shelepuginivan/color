@@ -37,6 +37,12 @@ func (c HSL) Hex() string {
 	return fmt.Sprintf("#%02x%02x%02x", rgb.R, rgb.G, rgb.B)
 }
 
+// HSL returns the color unchanged. This method is required to implement the
+// [Color] interface.
+func (c HSL) HSL() *HSL {
+	return &c
+}
+
 // HSV returns [HSV] representation of color (hue, saturation, value).
 func (c HSL) HSV() *HSV {
 	// Value normalization.

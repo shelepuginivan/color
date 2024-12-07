@@ -10,16 +10,7 @@ import (
 )
 
 func TestLab(t *testing.T) {
-	assert.Implements(t, (*interface {
-		CMYK() *color.CMYK
-		Hex() string
-		HSL() *color.HSL
-		HSV() *color.HSV
-		RGB() *color.RGB
-		XYZ() *color.XYZ
-
-		String() string // Tested
-	})(nil), color.Lab{})
+	assert.Implements(t, (*color.Color)(nil), color.Lab{})
 }
 
 func TestLab_String(t *testing.T) {

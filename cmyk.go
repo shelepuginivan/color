@@ -27,6 +27,12 @@ func NewCMYK(c, m, y, k int) *CMYK {
 	}
 }
 
+// CMYK returns the color unchanged. This method is required to implement the
+// [Color] interface.
+func (c CMYK) CMYK() *CMYK {
+	return &c
+}
+
 // Hex returns hexadecimal representation of color.
 func (c CMYK) Hex() string {
 	rgb := c.RGB()
