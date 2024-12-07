@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 
+	"github.com/shelepuginivan/color/internal/degrees"
 	"github.com/shelepuginivan/color/internal/normalize"
 )
 
@@ -90,7 +91,7 @@ func (c RGB) HSL() *HSL {
 	}
 
 	return &HSL{
-		H: normalize.Degrees(int(math.Round(h))),
+		H: degrees.Normalize(int(math.Round(h))),
 		S: normalize.FloatPercents(s),
 		L: normalize.FloatPercents(l),
 	}
@@ -126,7 +127,7 @@ func (c RGB) HSV() *HSV {
 	}
 
 	return &HSV{
-		H: normalize.Degrees(int(math.Round(h))),
+		H: degrees.Normalize(int(math.Round(h))),
 		S: normalize.FloatPercents(s),
 		V: normalize.FloatPercents(v),
 	}

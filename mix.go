@@ -3,6 +3,7 @@ package color
 import (
 	"math"
 
+	"github.com/shelepuginivan/color/internal/degrees"
 	"github.com/shelepuginivan/color/internal/normalize"
 )
 
@@ -50,7 +51,7 @@ func MixHSL(colors ...*HSL) *HSL {
 
 	for _, color := range colors {
 		// Convert hue to radians
-		rad := float64(color.H) * math.Pi / 180.0
+		rad := degrees.ToRadians(color.H)
 
 		// Convert hue to a point on a circle
 		sumX += math.Cos(rad)
@@ -61,15 +62,19 @@ func MixHSL(colors ...*HSL) *HSL {
 		sumL += float64(color.L)
 	}
 
-	// Average the points on the circle and convert back to hue
-	hue := math.Atan2(sumY/n, sumX/n) * 180.0 / math.Pi
+	// Average the points on the circle and convert back to hue.
+	var (
+		arctan = math.Atan2(sumY/n, sumX/n)
+		avgH   = degrees.FromRadians(arctan)
+	)
 
-	// Average saturation and lightness
-	avgH := normalize.Degrees(int(math.Round(hue)))
-	avgS := int(math.Round(sumS / n))
-	avgL := int(math.Round(sumL / n))
+	// Average saturation and lightness.
+	var (
+		avgS = int(math.Round(sumS / n))
+		avgL = int(math.Round(sumL / n))
+	)
 
-	return &HSL{H: avgH, S: avgS, L: avgL}
+	return &HSL{avgH, avgS, avgL}
 }
 
 // MixLab calculates the average color in Lab colorspace from an arbitrary

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 
+	"github.com/shelepuginivan/color/internal/degrees"
 	"github.com/shelepuginivan/color/internal/normalize"
 )
 
@@ -19,7 +20,7 @@ type HSV struct {
 // NewHSV returns a new instance of [HSV].
 func NewHSV(h, s, v int) *HSV {
 	return &HSV{
-		H: normalize.Degrees(h),
+		H: degrees.Normalize(h),
 		S: normalize.Percents(s),
 		V: normalize.Percents(v),
 	}

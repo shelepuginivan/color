@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 
+	"github.com/shelepuginivan/color/internal/degrees"
 	"github.com/shelepuginivan/color/internal/normalize"
 )
 
@@ -19,7 +20,7 @@ type HSL struct {
 // NewHSL returns a new instance of [HSL].
 func NewHSL(h, s, l int) *HSL {
 	return &HSL{
-		H: normalize.Degrees(h),
+		H: degrees.Normalize(h),
 		S: normalize.Percents(s),
 		L: normalize.Percents(l),
 	}
@@ -67,7 +68,7 @@ func (c HSL) HSV() *HSV {
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c HSL) RGB() *RGB {
 	var (
-		h = normalize.DegreesFloat(c.H)
+		h = degrees.ToFloat(c.H)
 		s = normalize.PercentsFloat(c.S)
 		l = normalize.PercentsFloat(c.L)
 	)
