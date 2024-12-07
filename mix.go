@@ -9,7 +9,7 @@ import (
 
 // MixCMYK calculates the average color in CMYK colorspace from an arbitrary
 // number of colors.
-func MixCMYK(colors ...*CMYK) *CMYK {
+func MixCMYK(colors ...Color) *CMYK {
 	if len(colors) == 0 {
 		return &CMYK{0, 0, 0, 0}
 	}
@@ -20,10 +20,12 @@ func MixCMYK(colors ...*CMYK) *CMYK {
 	)
 
 	for _, color := range colors {
-		c += percents.ToFloat(color.C)
-		m += percents.ToFloat(color.M)
-		y += percents.ToFloat(color.Y)
-		k += percents.ToFloat(color.K)
+		cmyk := color.CMYK()
+
+		c += percents.ToFloat(cmyk.C)
+		m += percents.ToFloat(cmyk.M)
+		y += percents.ToFloat(cmyk.Y)
+		k += percents.ToFloat(cmyk.K)
 	}
 
 	return &CMYK{
@@ -36,7 +38,7 @@ func MixCMYK(colors ...*CMYK) *CMYK {
 
 // MixHSL calculates the average color in HSL colorspace from an arbitrary
 // number of colors.
-func MixHSL(colors ...*HSL) *HSL {
+func MixHSL(colors ...Color) *HSL {
 	if len(colors) == 0 {
 		return &HSL{0, 0, 0}
 	}
@@ -50,16 +52,18 @@ func MixHSL(colors ...*HSL) *HSL {
 	)
 
 	for _, color := range colors {
+		hsl := color.HSL()
+
 		// Convert hue to radians
-		rad := degrees.ToRadians(color.H)
+		rad := degrees.ToRadians(hsl.H)
 
 		// Convert hue to a point on a circle
 		sumX += math.Cos(rad)
 		sumY += math.Sin(rad)
 
 		// Sum up saturation and lightness
-		sumS += float64(color.S)
-		sumL += float64(color.L)
+		sumS += float64(hsl.S)
+		sumL += float64(hsl.L)
 	}
 
 	// Average the points on the circle and convert back to hue.
@@ -82,7 +86,7 @@ func MixHSL(colors ...*HSL) *HSL {
 //
 // (95.047, 100.000, 108.883) is set as the reference white of the resulting
 // color. Use [Lab.SetReferenceWhite] to set a different reference white.
-func MixLab(colors ...*Lab) *Lab {
+func MixLab(colors ...Color) *Lab {
 	if len(colors) == 0 {
 		return &Lab{0, 0, 0, DefaultReferenceWhite}
 	}
@@ -95,7 +99,8 @@ func MixLab(colors ...*Lab) *Lab {
 	)
 
 	for _, color := range colors {
-		norm := &Lab{color.L, color.A, color.B, color.White}
+		lab := color.Lab()
+		norm := &Lab{lab.L, lab.A, lab.B, lab.White}
 		norm.SetReferenceWhite(DefaultReferenceWhite)
 
 		sumL += norm.L
@@ -114,7 +119,7 @@ func MixLab(colors ...*Lab) *Lab {
 
 // MixRGB calculates the average color in RGB colorspace from an arbitrary
 // number of colors.
-func MixRGB(colors ...*RGB) *RGB {
+func MixRGB(colors ...Color) *RGB {
 	if len(colors) == 0 {
 		return &RGB{0, 0, 0}
 	}
@@ -125,9 +130,10 @@ func MixRGB(colors ...*RGB) *RGB {
 	)
 
 	for _, color := range colors {
-		r += float64(color.R)
-		g += float64(color.G)
-		b += float64(color.B)
+		rgb := color.RGB()
+		r += float64(rgb.R)
+		g += float64(rgb.G)
+		b += float64(rgb.B)
 	}
 
 	return &RGB{
