@@ -3,3 +3,7 @@ preview:
 
 test:
 	go test ./... -cover
+
+clean:
+	go mod tidy
+	go clean -testcache
