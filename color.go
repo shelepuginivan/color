@@ -8,6 +8,7 @@ type Color interface {
 	HSL() *HSL
 	HSV() *HSV
 	Lab() *Lab
+	Lch() *Lch
 	RGB() *RGB
 	XYZ() *XYZ
 	String() string

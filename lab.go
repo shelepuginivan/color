@@ -1,6 +1,11 @@
 package color
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+
+	"github.com/shelepuginivan/color/internal/degrees"
+)
 
 // Lab represents a color in [Lab] colorspace.
 //
@@ -41,6 +46,15 @@ func (c Lab) HSV() *HSV {
 // [Color] interface.
 func (c Lab) Lab() *Lab {
 	return &c
+}
+
+// Lch returns [Lch] representation of color (lightness, chroma, hue).
+func (c Lab) Lch() *Lch {
+	return &Lch{
+		L: c.L,
+		C: math.Sqrt(c.A*c.A + c.B*c.B),
+		H: degrees.FromRadians(math.Atan2(c.B, c.A)),
+	}
 }
 
 // RGB returns [RGB] representation of color (red, green, blue).

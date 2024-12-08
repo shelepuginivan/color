@@ -168,6 +168,14 @@ func (c RGB) Lab() *Lab {
 	return c.XYZ().Lab()
 }
 
+// Lch returns [Lch] representation of color (lightness, chroma, hue).
+//
+// [D65] is used as a reference white. Use [XYZ.LabWithWhitepoint] to specify a
+// different whitepoint.
+func (c RGB) Lch() *Lch {
+	return c.XYZ().Lab().Lch()
+}
+
 // RGB returns the color unchanged. This method is required to implement the
 // [Color] interface.
 func (c RGB) RGB() *RGB {

@@ -86,6 +86,14 @@ func (c CMYK) Lab() *Lab {
 	return c.XYZ().Lab()
 }
 
+// Lch returns [Lch] representation of color (lightness, chroma, hue).
+//
+// [D65] is used as a reference white. Use [XYZ.LabWithWhitepoint] to specify a
+// different whitepoint.
+func (c CMYK) Lch() *Lch {
+	return c.XYZ().Lab().Lch()
+}
+
 // Edit allows in-place modification of the [CMYK] color instance using the
 // provided editing function.
 //

@@ -108,6 +108,14 @@ func (c XYZ) Lab() *Lab {
 	return c.LabWithWhitepoint(D65)
 }
 
+// Lch returns [Lch] representation of color (lightness, chroma, hue).
+//
+// [D65] is used as a reference white. Use [XYZ.LabWithWhitepoint] to specify a
+// different whitepoint.
+func (c XYZ) Lch() *Lch {
+	return c.XYZ().Lab().Lch()
+}
+
 // LabWithWhitepoint returns [Lab] representation of color, allowing to
 // specify reference white color.
 func (c XYZ) LabWithWhitepoint(white *XYZ) *Lab {
