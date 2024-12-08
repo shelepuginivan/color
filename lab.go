@@ -9,31 +9,12 @@ type Lab struct {
 	L float64 // L represents lightness of the color.
 	A float64 // A represents the green-red component of the color.
 	B float64 // B represents the yellow-blue component of the color.
-
-	White *XYZ // Reference white.
 }
 
 // NewLab returns a new instance of [Lab] with the default reference white
 // [D65].
 func NewLab(l, a, b float64) *Lab {
-	return &Lab{l, a, b, D65}
-}
-
-// NewLabWithWhitepoint returns a new instance of [Lab] and allows to set a
-// custom whitepoint.
-func NewLabWithWhitepoint(l, a, b float64, white *XYZ) *Lab {
-	return &Lab{l, a, b, white}
-}
-
-// SetWhitepoint sets [Lab] reference white.
-func (c *Lab) SetWhitepoint(white *XYZ) *Lab {
-	color := c.XYZ().LabWithWhitepoint(white)
-
-	c.L = color.L
-	c.A = color.A
-	c.B = color.B
-
-	return color
+	return &Lab{l, a, b}
 }
 
 // CMYK returns [CMYK] representation of color (cyan, magenta, yellow, key).
@@ -67,10 +48,15 @@ func (c Lab) RGB() *RGB {
 	return c.XYZ().RGB()
 }
 
-// XYZWithReferenceWhite returns [XYZ] representation of color.
-//
-// [Lab.White] is used as a reference white.
+// XYZ returns [XYZ] representation of color. [D65] is used as whitepoint, use
+// [Lab.XYZWithWhitepoint] to specify a different whitepoint.
 func (c Lab) XYZ() *XYZ {
+	return c.XYZWithWhitepoint(D65)
+}
+
+// XYZWithWhitepoint returns [XYZ] representation of color and allows to
+// specify whitepoint.
+func (c Lab) XYZWithWhitepoint(white *XYZ) *XYZ {
 	var (
 		fy = (c.L + 16) / 116
 		fx = c.A/500 + fy
@@ -78,9 +64,9 @@ func (c Lab) XYZ() *XYZ {
 	)
 
 	var (
-		x = labFToXyzVal(fx) * c.White.X
-		y = labFToXyzVal(fy) * c.White.Y
-		z = labFToXyzVal(fz) * c.White.Z
+		x = labFToXyzVal(fx) * white.X
+		y = labFToXyzVal(fy) * white.Y
+		z = labFToXyzVal(fz) * white.Z
 	)
 
 	return &XYZ{x, y, z}

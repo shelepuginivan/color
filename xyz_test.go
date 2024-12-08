@@ -18,14 +18,14 @@ func TestXYZ_Lab(t *testing.T) {
 		color    *color.XYZ
 		expected *color.Lab
 	}{
-		{&color.XYZ{0, 0, 0}, &color.Lab{0, 0, 0, color.D65}},
-		{&color.XYZ{0.41246, 0.21267, 0.01933}, &color.Lab{53.27, 80.109, 67.220, color.D65}},
-		{&color.XYZ{0.35758, 0.71515, 0.11919}, &color.Lab{87.73, -86.1846, 83.181, color.D65}},
-		{&color.XYZ{0.18044, 0.07217, 0.95030}, &color.Lab{32.30, 79.19667, -107.86368, color.D65}},
-		{&color.XYZ{0.77003, 0.92783, 0.13853}, &color.Lab{97.13, -21.5559, 94.4845, color.D65}},
-		{&color.XYZ{0.59289, 0.28485, 0.96964}, &color.Lab{60.3199, 98.2542, -60.84298, color.D65}},
-		{&color.XYZ{0.53801, 0.78733, 1.06950}, &color.Lab{91.1165, -48.0796, -14.1381, color.D65}},
-		{&color.XYZ{0.95047, 1.00000, 1.08883}, &color.Lab{100.0, 0.00526, -0.0104, color.D65}},
+		{&color.XYZ{0, 0, 0}, &color.Lab{0, 0, 0}},
+		{&color.XYZ{0.41246, 0.21267, 0.01933}, &color.Lab{53.27, 80.109, 67.220}},
+		{&color.XYZ{0.35758, 0.71515, 0.11919}, &color.Lab{87.73, -86.1846, 83.181}},
+		{&color.XYZ{0.18044, 0.07217, 0.95030}, &color.Lab{32.30, 79.19667, -107.86368}},
+		{&color.XYZ{0.77003, 0.92783, 0.13853}, &color.Lab{97.13, -21.5559, 94.4845}},
+		{&color.XYZ{0.59289, 0.28485, 0.96964}, &color.Lab{60.3199, 98.2542, -60.84298}},
+		{&color.XYZ{0.53801, 0.78733, 1.06950}, &color.Lab{91.1165, -48.0796, -14.1381}},
+		{&color.XYZ{0.95047, 1.00000, 1.08883}, &color.Lab{100.0, 0.00526, -0.0104}},
 	}
 
 	for _, c := range cases {
@@ -43,14 +43,14 @@ func TestXYZ_LabWithReferenceWhite(t *testing.T) {
 		white    *color.XYZ
 		expected *color.Lab
 	}{
-		{&color.XYZ{0, 0, 0}, color.D65, &color.Lab{0, 0, 0, color.D65}},
-		{&color.XYZ{0.41246, 0.21267, 0.01933}, color.D65, &color.Lab{53.27, 80.109, 67.220, color.D65}},
-		{&color.XYZ{0.35758, 0.71515, 0.11919}, color.D65, &color.Lab{87.73, -86.1846, 83.181, color.D65}},
-		{&color.XYZ{0.18044, 0.07217, 0.95030}, color.D65, &color.Lab{32.30, 79.19667, -107.86368, color.D65}},
-		{&color.XYZ{0.77003, 0.92783, 0.13853}, color.D65, &color.Lab{97.13, -21.5559, 94.4845, color.D65}},
-		{&color.XYZ{0.59289, 0.28485, 0.96964}, color.D65, &color.Lab{60.3199, 98.2542, -60.84298, color.D65}},
-		{&color.XYZ{0.53801, 0.78733, 1.06950}, color.D65, &color.Lab{91.1165, -48.0796, -14.1381, color.D65}},
-		{&color.XYZ{0.95047, 1.000, 1.08883}, color.D65, &color.Lab{100.0, 0.00526, -0.0104, color.D65}},
+		{&color.XYZ{0, 0, 0}, color.D65, &color.Lab{0, 0, 0}},
+		{&color.XYZ{0.41246, 0.21267, 0.01933}, color.D65, &color.Lab{53.27, 80.109, 67.220}},
+		{&color.XYZ{0.35758, 0.71515, 0.11919}, color.D65, &color.Lab{87.73, -86.1846, 83.181}},
+		{&color.XYZ{0.18044, 0.07217, 0.95030}, color.D65, &color.Lab{32.30, 79.19667, -107.86368}},
+		{&color.XYZ{0.77003, 0.92783, 0.13853}, color.D65, &color.Lab{97.13, -21.5559, 94.4845}},
+		{&color.XYZ{0.59289, 0.28485, 0.96964}, color.D65, &color.Lab{60.3199, 98.2542, -60.84298}},
+		{&color.XYZ{0.53801, 0.78733, 1.06950}, color.D65, &color.Lab{91.1165, -48.0796, -14.1381}},
+		{&color.XYZ{0.95047, 1.000, 1.08883}, color.D65, &color.Lab{100.0, 0.00526, -0.0104}},
 	}
 
 	for _, c := range cases {

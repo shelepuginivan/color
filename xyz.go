@@ -123,7 +123,7 @@ func (c XYZ) LabWithWhitepoint(white *XYZ) *Lab {
 		b = 200 * (fy - fz)
 	)
 
-	return &Lab{l, a, b, white}
+	return &Lab{l, a, b}
 }
 
 // XYZ returns the color unchanged. This method is required to implement the
