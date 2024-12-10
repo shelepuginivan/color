@@ -145,9 +145,9 @@ func (c RGB) XYZ() *XYZ {
 
 	// Vectorize sRGB values.
 	var (
-		rVec = srgbToLinear(r) * 100.0
-		gVec = srgbToLinear(g) * 100.0
-		bVec = srgbToLinear(b) * 100.0
+		rVec = srgbToLinear(r)
+		gVec = srgbToLinear(g)
+		bVec = srgbToLinear(b)
 	)
 
 	var (
