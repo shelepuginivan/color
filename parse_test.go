@@ -10,6 +10,34 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestParseNamed(t *testing.T) {
+	cases := []struct {
+		input    string
+		expected *color.RGB
+		isErr    bool
+	}{
+		{"maroon", &color.RGB{128, 0, 0}, false},
+		{"red", &color.RGB{255, 0, 0}, false},
+		{"white", &color.RGB{255, 255, 255}, false},
+		{"black", &color.RGB{0, 0, 0}, false},
+		{"ReD", &color.RGB{255, 0, 0}, false},
+		{"notacolor", nil, true},
+		{"", nil, true},
+	}
+
+	for _, c := range cases {
+		actual, err := color.ParseNamed(c.input)
+
+		if c.isErr {
+			assert.Nil(t, c.expected)
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
+			assert.Equal(t, c.expected, actual)
+		}
+	}
+}
+
 func TestParseHex(t *testing.T) {
 	cases := []struct {
 		hex      string
