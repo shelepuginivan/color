@@ -181,9 +181,7 @@ func ParseHex(hex string) (Color, error) {
 		i++
 	}
 
-	var (
-		hex_r, hex_g, hex_b string
-	)
+	var hex_r, hex_g, hex_b string
 
 	switch len(hex) - i {
 	case 3: // Short hexadecimal notation, e.g. `#abc`.
