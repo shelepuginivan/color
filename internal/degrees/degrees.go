@@ -30,3 +30,13 @@ func ToRadians(v int) float64 {
 func FromRadians(v float64) int {
 	return Normalize(int(math.Round(v * 180 / math.Pi)))
 }
+
+// ToTurn returns angle in turns from degrees.
+func ToTurn(v int) float64 {
+	return float64(v) / 360
+}
+
+// FromTurn returns angle in degrees from turns.
+func FromTurn(v float64) int {
+	return int(math.Round(v * 360))
+}

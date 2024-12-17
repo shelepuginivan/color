@@ -102,3 +102,44 @@ func TestFromRadians(t *testing.T) {
 		assert.Equal(t, c.expected, actual)
 	}
 }
+
+func TestToTurn(t *testing.T) {
+	cases := []struct {
+		input    int
+		expected float64
+	}{
+		{0, 0.0},
+		{360, 1.0},
+		{720, 2.0},
+		{-360, -1.0},
+		{450, 1.25},
+		{-450, -1.25},
+		{180, 0.5},
+		{540, 1.5},
+	}
+
+	for _, c := range cases {
+		actual := degrees.ToTurn(c.input)
+		assert.Equal(t, c.expected, actual)
+	}
+}
+
+func TestFromTurn(t *testing.T) {
+	cases := []struct {
+		input    float64
+		expected int
+	}{
+		{0.0, 0},
+		{1.0, 360},
+		{0.5, 180},
+		{1.25, 450},
+		{-1.0, -360},
+		{-0.25, -90},
+		{1.5, 540},
+	}
+
+	for _, c := range cases {
+		actual := degrees.FromTurn(c.input)
+		assert.Equal(t, c.expected, actual)
+	}
+}
