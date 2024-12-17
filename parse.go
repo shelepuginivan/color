@@ -10,6 +10,36 @@ import (
 	"github.com/shelepuginivan/color/internal/percents"
 )
 
+// Parse is a generic color parsing function.
+//
+// The following order is used for parsing:
+//  1. [CSS named colors] using [color.ParseNamed]
+//  2. Hexadecimal notation using [color.ParseHex]
+//  3. Color functions using [color.ParseFunc]
+//
+// See [color.ParseNamed], [color.ParseHex], and [color.ParseFunc] for more
+// information about color notations supported by Parse.
+//
+// [CSS named colors]: https://developer.mozilla.org/en-US/docs/Web/CSS/named-color
+func Parse(s string) (Color, error) {
+	c, err := ParseNamed(s)
+	if err == nil {
+		return c, nil
+	}
+
+	c, err = ParseHex(s)
+	if err == nil {
+		return c, nil
+	}
+
+	c, err = ParseFunc(s)
+	if err == nil {
+		return c, nil
+	}
+
+	return nil, fmt.Errorf("failed to parse input string")
+}
+
 // namedColorMap maps [CSS named colors] to [RGB]. See [Reference].
 //
 // [CSS named colors]: https://developer.mozilla.org/en-US/docs/Web/CSS/named-color
