@@ -2,8 +2,12 @@ package color
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
+
+	"github.com/shelepuginivan/color/internal/degrees"
+	"github.com/shelepuginivan/color/internal/percents"
 )
 
 // namedColorMap maps [CSS named colors] to [RGB]. See [Reference].
@@ -212,4 +216,200 @@ func ParseHex(hex string) (Color, error) {
 	}
 
 	return &RGB{uint8(r), uint8(g), uint8(b)}, nil
+}
+
+// ParseFunc parses the color function and returns a color.
+//
+// A color function is a string starting with the function name (e.g. rgb),
+// containing its parameters in parentheses. Some examples are:
+//   - rgb(255, 255, 255)
+//   - hsl(0.8turn 80% 30%)
+//   - xyz(0.9642, 1.0000, 0.8251)
+//
+// Arguments of the function may or may not be comma-separated.
+//
+// The following units are supported for the arguments:
+//   - Percents (%)
+//   - Radians (rad)
+//   - Turns (turn)
+//   - Degrees (deg)
+//
+// Additionally, none is interpreted as zero:
+//
+//	color.ParseFunc("lch(29.2345% 44.2 none)") // &color.Lch{0.29345, 44.2, 0}
+//
+// Note that ParseFunc does not implement CSS color functions completely. For
+// example, there is no support for relative values; i.e. the following call:
+//
+//	color.ParseFunc("hsl(from green h s l / 0.5)")
+//
+// results in error.
+func ParseFunc(fnstring string) (Color, error) {
+	tokens := strings.FieldsFunc(fnstring, func(r rune) bool {
+		return r == ' ' || r == ',' || r == '(' || r == ')'
+	})
+
+	if len(tokens) < 1 {
+		return nil, fmt.Errorf("failed to tokenize function string")
+	}
+
+	var (
+		// Name of the function, e.g. rgb, hsl, xyz.
+		funcName = tokens[0]
+
+		// Argument slice (arguments stored as strings).
+		args = tokens[1:]
+
+		// Expected length of the argument slice.
+		//
+		// All color functions require at least 3 arguments, with only CMYK
+		// requiring more than 3 arguments
+		expectedLength = 3
+	)
+
+	if funcName == "cmyk" {
+		expectedLength++
+	}
+
+	if err := checkArgsLen(funcName, expectedLength, args); err != nil {
+		return nil, err
+	}
+
+	parsedArgs := make([]float64, expectedLength)
+
+	for index, arg := range args {
+		parsed, err := parseArg(arg)
+		if err != nil {
+			return nil, err
+		}
+		parsedArgs[index] = parsed
+	}
+
+	switch funcName {
+	case "cmyk":
+		return NewCMYK(
+			percents.FromFloat(parsedArgs[0]),
+			percents.FromFloat(parsedArgs[1]),
+			percents.FromFloat(parsedArgs[2]),
+			percents.FromFloat(parsedArgs[3]),
+		), nil
+	case "hsl":
+		return NewHSL(
+			int(math.Round(parsedArgs[0])),
+			percents.FromFloat(parsedArgs[1]),
+			percents.FromFloat(parsedArgs[2]),
+		), nil
+	case "hsv":
+		return NewHSV(
+			int(math.Round(parsedArgs[0])),
+			percents.FromFloat(parsedArgs[1]),
+			percents.FromFloat(parsedArgs[2]),
+		), nil
+	case "lab":
+		return NewLab(
+			parsedArgs[0],
+			parsedArgs[1],
+			parsedArgs[2],
+		), nil
+	case "lch":
+		return NewLch(
+			parsedArgs[0],
+			parsedArgs[1],
+			int(math.Round(parsedArgs[2])),
+		), nil
+	case "rgb":
+		return NewRGB(
+			uint8(math.Round(parsedArgs[0])),
+			uint8(math.Round(parsedArgs[1])),
+			uint8(math.Round(parsedArgs[2])),
+		), nil
+	case "xyz":
+		return NewXYZ(
+			parsedArgs[0],
+			parsedArgs[1],
+			parsedArgs[2],
+		), nil
+	}
+
+	return nil, fmt.Errorf("unknown color function %s", funcName)
+}
+
+// parseArg parses the argument.
+//
+// It supports the following units:
+//   - Percents (%)
+//   - Radians (rad)
+//   - Turns (turn)
+//   - Degrees (deg)
+//
+// Additionally, none is interpreted as zero.
+func parseArg(arg string) (float64, error) {
+	// None.
+	if arg == "none" {
+		return 0, nil
+	}
+
+	// Percents.
+	// In this case the parsed value should be divided by 100.
+	if arg[len(arg)-1] == '%' {
+		norm := arg[:len(arg)-1]
+
+		v, err := strconv.ParseFloat(norm, 64)
+		if err != nil {
+			return 0, err
+		}
+
+		return v / 100, nil
+	}
+
+	// Radians.
+	// In this case the parsed value should be converted to degrees.
+	if strings.HasSuffix(arg, "rad") {
+		norm := arg[:len(arg)-3]
+
+		v, err := strconv.ParseFloat(norm, 64)
+		if err != nil {
+			return 0, err
+		}
+
+		return float64(degrees.FromRadians(v)), nil
+	}
+
+	// Turns.
+	// In this case the parsed value should be converted to degrees
+	if strings.HasSuffix(arg, "turn") {
+		norm := arg[:len(arg)-4]
+
+		v, err := strconv.ParseFloat(norm, 64)
+		if err != nil {
+			return 0, err
+		}
+
+		return float64(degrees.Normalize(degrees.FromTurn(v))), nil
+	}
+
+	// Degrees.
+	if strings.HasSuffix(arg, "deg") {
+		norm := arg[:len(arg)-3]
+		return strconv.ParseFloat(norm, 64)
+	}
+
+	// Other cases.
+	return strconv.ParseFloat(arg, 64)
+}
+
+// checkArgsLen compares actual length of the slice array with the expected and
+// returns formatted error if they don't match.
+func checkArgsLen(funcName string, expected int, args []string) error {
+	got := len(args)
+
+	if got < expected {
+		return fmt.Errorf("not enough arguments for %s: expected %d, got %d", funcName, expected, got)
+	}
+
+	if got > expected {
+		return fmt.Errorf("too many arguments for %s: expected %d, got %d", funcName, expected, got)
+	}
+
+	return nil
 }
