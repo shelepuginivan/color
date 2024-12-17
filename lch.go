@@ -13,7 +13,7 @@ import (
 type Lch struct {
 	L float64 // L represents lightness of the color.
 	C float64 // C represents relative saturation (chroma).
-	H int     // H represents angle of the hue in the CIELAB color wheel.
+	H int     // H represents angle of the hue in the CIELAB color wheel (in degrees).
 }
 
 // NewLch returns a new instance of [Lch].
