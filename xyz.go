@@ -73,7 +73,7 @@ func (c XYZ) HSV() *HSV {
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c XYZ) RGB() *RGB {
 	// Convert XYZ to sRGB in linear form.
-	// NOTE: See links below for convertion matrix:
+	// NOTE: See links below for conversion matrix:
 	//   - http://www.brucelindbloom.com/index.html?Eqn_XYZ_to_RGB.html
 	//   - https://www.oceanopticsbook.info/view/photometry-and-visibility/from-xyz-to-rgb
 	var (
