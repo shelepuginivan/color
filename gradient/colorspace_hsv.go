@@ -31,9 +31,6 @@ func (cHSV *ColorspaceHSV) Colors(stops []*ColorStop, steps int) []color.Color {
 }
 
 func (cHSV *ColorspaceHSV) Intermediate(start, end color.Color, steps int) []color.Color {
-	// NOTE: see [Hue Interpolation] on MDN.
-	//
-	// [Hue Interpolation]: https://developer.mozilla.org/en-US/docs/Web/CSS/hue-interpolation-method
 	var (
 		colors = make([]color.Color, steps)
 
