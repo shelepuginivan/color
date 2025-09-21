@@ -95,6 +95,22 @@ func InLab(whitepoint *color.XYZ) GradientOption {
 	}
 }
 
+// InLch sets gradient colorspace to Lch, a cylindrical counterpart of CIE Lab.
+//
+// The method parameter controls how the hue should transition between colors
+// along the hue circle. See [HueInterpolationMethod] for more information.
+//
+// The whitepoint parameter specifies reference white color.
+func InLch(method HueInterpolationMethod, whitepoint *color.XYZ) GradientOption {
+	if whitepoint == nil {
+		whitepoint = color.D65
+	}
+
+	return func(opts *gradientOptions) {
+		opts.colorspace = &ColorspaceLch{method, whitepoint}
+	}
+}
+
 // InOklab sets gradient colorspace to Oklab.
 func InOklab(opts *gradientOptions) {
 	opts.colorspace = &ColorspaceOklab{}
