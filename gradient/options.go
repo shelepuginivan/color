@@ -41,6 +41,8 @@ type GradientOption func(*gradientOptions)
 //
 // The position should be a number within [0, 1], otherwise it is clamped.
 func WithColorStop(color color.Color, position float64) GradientOption {
+	position = max(0, min(1, position))
+
 	return func(opts *gradientOptions) {
 		opts.stops = append(opts.stops, &ColorStop{color, position})
 	}
