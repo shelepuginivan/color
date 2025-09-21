@@ -8,7 +8,7 @@ import (
 	"github.com/shelepuginivan/color/internal/percents"
 )
 
-// [HSV] representation of color.
+// HSV represents color in [HSV] colorspace.
 //
 // [HSV]: https://en.wikipedia.org/wiki/HSL_and_HSV
 type HSV struct {

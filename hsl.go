@@ -8,7 +8,7 @@ import (
 	"github.com/shelepuginivan/color/internal/percents"
 )
 
-// [HSL] representation of color.
+// HSL represents color in [HSL] colorspace.
 //
 // [HSL]: https://en.wikipedia.org/wiki/HSL
 type HSL struct {
