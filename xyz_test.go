@@ -62,6 +62,23 @@ func TestXYZ_LabWithReferenceWhite(t *testing.T) {
 	}
 }
 
+func TestXYZ_Oklab(t *testing.T) {
+	cases := []struct {
+		color    *color.XYZ
+		expected *color.Oklab
+	}{
+		{&color.XYZ{0.20654008, 0.12197225, 0.05136952}, &color.Oklab{0.5163401, 0.154695, 0.0628957}},
+	}
+
+	for _, c := range cases {
+		actual := c.color.Oklab()
+
+		assert.InDelta(t, c.expected.L, actual.L, 0.05)
+		assert.InDelta(t, c.expected.A, actual.A, 0.05)
+		assert.InDelta(t, c.expected.B, actual.B, 0.05)
+	}
+}
+
 func TestXYZ_RGB(t *testing.T) {
 	cases := []struct {
 		color    *color.XYZ
