@@ -5,6 +5,7 @@ import (
 	"sort"
 
 	"github.com/shelepuginivan/color"
+	"github.com/shelepuginivan/color/internal/degrees"
 )
 
 // HueInterpolationMethod represents how the hue should transition between
@@ -31,6 +32,7 @@ const (
 
 type gradientOptions struct {
 	stops      []*ColorStop
+	angle      int
 	colorspace Colorspace
 }
 
@@ -45,6 +47,12 @@ func WithColorStop(color color.Color, position float64) GradientOption {
 
 	return func(opts *gradientOptions) {
 		opts.stops = append(opts.stops, &ColorStop{color, position})
+	}
+}
+
+func WithAngle(angle int) GradientOption {
+	return func(opts *gradientOptions) {
+		opts.angle = degrees.Normalize(angle)
 	}
 }
 
