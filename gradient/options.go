@@ -7,6 +7,28 @@ import (
 	"github.com/shelepuginivan/color"
 )
 
+// HueType represents how the hue should transition between colors along the
+// hue circle. Used for gradients in cylindrical color spaces
+type HueType uint8
+
+const (
+	// Follow the shortest path on the hue circle between colors
+	// (minimal angle difference).
+	ShorterHue HueType = iota
+
+	// Follow the longer path on the hue circle between colors
+	// (maximal angle difference).
+	LongerHue
+
+	// Always increase hue angle from start to end, moving forward around the
+	// circle.
+	IncreasingHue
+
+	// Always decrease hue angle from start to end, moving backward around the
+	// circle.
+	DecreasingHue
+)
+
 type gradientOptions struct {
 	stops      []*ColorStop
 	colorspace Colorspace
@@ -27,6 +49,15 @@ func WithColorStop(color color.Color, position float64) GradientOption {
 // InRGB sets gradient colorspace to RGB.
 func InRGB(opts *gradientOptions) {
 	opts.colorspace = &ColorspaceRGB{}
+}
+
+// InHSL sets gradient colorspace to HSL. The hue parameter controls how the
+// hue should transition between colors along the hue circle. See [HueType]
+// for more information.
+func InHSL(hue HueType) GradientOption {
+	return func(opts *gradientOptions) {
+		opts.colorspace = &ColorspaceHSL{hue}
+	}
 }
 
 // finalizeOptions validates and normalizes gradient options.
