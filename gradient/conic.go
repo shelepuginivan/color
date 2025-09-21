@@ -7,13 +7,12 @@ import (
 	"math"
 
 	"github.com/shelepuginivan/color"
-	"github.com/shelepuginivan/color/internal/degrees"
 )
 
 type ConicGradient struct {
 	stops      []*ColorStop
-	center     *point
-	angle      float64
+	angle      angleSpec
+	center     pointSpec
 	colorspace Colorspace
 }
 
@@ -29,12 +28,9 @@ func NewConic(options ...GradientOption) (*ConicGradient, error) {
 	}
 
 	return &ConicGradient{
-		stops:  opts.stops,
-		center: opts.center,
-
-		// CSS conic-gradient baseline is vertical (from center point to the top),
-		// angle rotates it clockwise.
-		angle:      math.Pi/2 - degrees.ToRadians(opts.angle),
+		stops:      opts.stops,
+		angle:      opts.angle,
+		center:     opts.center,
 		colorspace: opts.colorspace,
 	}, nil
 }
@@ -45,29 +41,20 @@ func (cg *ConicGradient) Colors(steps int) []color.Color {
 
 func (cg *ConicGradient) Render(img image.Image) {
 	rect := img.Bounds()
-	width := rect.Max.X - rect.Min.Y
-	height := rect.Max.Y - rect.Min.Y
-
-	center := cg.center
-	if center == nil {
-		center = &point{
-			x: width / 2,
-			y: height / 2,
-		}
-	}
+	center := cg.center.Position(rect)
+	angle := cg.angle.NormalizedRadiansWithCenter(rect, center)
 
 	depth := 360
-
 	colors := cg.Colors(depth)
 
 	for x := rect.Min.X; x < rect.Max.X; x++ {
 		for y := rect.Min.Y; y < rect.Max.Y; y++ {
 			dx := float64(x - center.x)
 			dy := float64(y - center.y)
-			angle := math.Atan2(dy, dx) + cg.angle
+			angle := math.Atan2(dy, dx) + angle
 			angle = math.Mod(angle+2*math.Pi, 2*math.Pi)
 			fraction := angle / (2 * math.Pi)
-			t := int((fraction * float64(depth))) % depth
+			t := int((fraction*float64(depth))+float64(depth)) % depth
 
 			rgb := colors[t].RGB()
 			native := &gocolor.RGBA{rgb.R, rgb.G, rgb.B, 255}

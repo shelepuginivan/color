@@ -10,7 +10,7 @@ import (
 
 type RadialGradient struct {
 	stops      []*ColorStop
-	center     *point
+	center     pointSpec
 	colorspace Colorspace
 }
 
@@ -38,16 +38,7 @@ func (rg *RadialGradient) Colors(steps int) []color.Color {
 
 func (rg *RadialGradient) Render(img image.Image) {
 	rect := img.Bounds()
-	width := rect.Max.X - rect.Min.Y
-	height := rect.Max.Y - rect.Min.Y
-
-	center := rg.center
-	if center == nil {
-		center = &point{
-			x: width / 2,
-			y: height / 2,
-		}
-	}
+	center := rg.center.Position(rect)
 
 	maxDist := rg.calcMaxDistance(center, rect)
 	colors := rg.Colors(maxDist + 1)
@@ -65,7 +56,7 @@ func (rg *RadialGradient) Render(img image.Image) {
 	}
 }
 
-func (rg *RadialGradient) calcMaxDistance(center *point, rect image.Rectangle) int {
+func (rg *RadialGradient) calcMaxDistance(center point, rect image.Rectangle) int {
 	corners := [][2]int{
 		{rect.Min.X, rect.Min.Y},
 		{rect.Max.X, rect.Min.Y},

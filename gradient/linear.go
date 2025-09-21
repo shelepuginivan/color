@@ -7,13 +7,12 @@ import (
 	"math"
 
 	"github.com/shelepuginivan/color"
-	"github.com/shelepuginivan/color/internal/degrees"
 )
 
 type LinearGradient struct {
 	stops      []*ColorStop
-	angle      int
 	colorspace Colorspace
+	angle      angleSpec
 }
 
 func NewLinear(options ...GradientOption) (*LinearGradient, error) {
@@ -40,7 +39,10 @@ func (lg *LinearGradient) Colors(steps int) []color.Color {
 
 func (lg *LinearGradient) Render(img image.Image) {
 	rect := img.Bounds()
-	theta := degrees.ToRadians(-lg.angle)
+
+	// In linear gradient, angle represents direction,
+	// so the actual angle is the opposite.
+	theta := 2*math.Pi - lg.angle.NormalizedRadians(rect)
 	dx := math.Cos(theta)
 	dy := math.Sin(theta)
 

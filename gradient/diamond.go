@@ -11,7 +11,7 @@ import (
 
 type DiamondGradient struct {
 	stops      []*ColorStop
-	center     *point
+	center     pointSpec
 	colorspace Colorspace
 }
 
@@ -39,16 +39,7 @@ func (dg *DiamondGradient) Colors(steps int) []color.Color {
 
 func (dg *DiamondGradient) Render(img image.Image) {
 	rect := img.Bounds()
-	width := rect.Max.X - rect.Min.Y
-	height := rect.Max.Y - rect.Min.Y
-
-	center := dg.center
-	if center == nil {
-		center = &point{
-			x: width / 2,
-			y: height / 2,
-		}
-	}
+	center := dg.center.Position(rect)
 
 	maxDist := dg.calcMaxDistance(center, rect)
 	colors := dg.Colors(maxDist + 1)
@@ -66,7 +57,7 @@ func (dg *DiamondGradient) Render(img image.Image) {
 	}
 }
 
-func (dg *DiamondGradient) calcMaxDistance(center *point, rect image.Rectangle) int {
+func (dg *DiamondGradient) calcMaxDistance(center point, rect image.Rectangle) int {
 	corners := [][2]int{
 		{rect.Min.X, rect.Min.Y},
 		{rect.Max.X, rect.Min.Y},
