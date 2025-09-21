@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/shelepuginivan/color"
+	"github.com/shelepuginivan/color/internal/interpolate"
 )
 
 type ColorspaceRGB struct{}
@@ -38,14 +39,14 @@ func (cRGB *ColorspaceRGB) Intermediate(start, end color.Color, steps int) []col
 	for i := range steps {
 		scale := float64(i) / float64(steps-1)
 
-		r := float64(s.R)*(1-scale) + float64(e.R)*scale
-		g := float64(s.G)*(1-scale) + float64(e.G)*scale
-		b := float64(s.B)*(1-scale) + float64(e.B)*scale
+		r := interpolate.RectangularUint8(s.R, e.R, scale)
+		g := interpolate.RectangularUint8(s.G, e.G, scale)
+		b := interpolate.RectangularUint8(s.B, e.B, scale)
 
 		colors[i] = &color.RGB{
-			R: uint8(r),
-			G: uint8(g),
-			B: uint8(b),
+			R: r,
+			G: g,
+			B: b,
 		}
 	}
 

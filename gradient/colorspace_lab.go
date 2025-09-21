@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/shelepuginivan/color"
+	"github.com/shelepuginivan/color/internal/interpolate"
 )
 
 type ColorspaceLab struct {
@@ -40,9 +41,9 @@ func (cLab *ColorspaceLab) Intermediate(start, end color.Color, steps int) []col
 	for i := range steps {
 		scale := float64(i) / float64(steps-1)
 
-		l := s.L*(1-scale) + e.L*scale
-		a := s.A*(1-scale) + e.A*scale
-		b := s.B*(1-scale) + e.B*scale
+		l := interpolate.Rectangular(s.L, e.L, scale)
+		a := interpolate.Rectangular(s.A, e.A, scale)
+		b := interpolate.Rectangular(s.B, e.B, scale)
 
 		colors[i] = &color.Lab{
 			L: l,
