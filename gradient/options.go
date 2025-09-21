@@ -62,6 +62,21 @@ func InHSL(hue HueType) GradientOption {
 	}
 }
 
+// InXYZ sets gradient colorspace to CIE XYZ. The whitepoint parameter
+// specifies reference white color.
+//
+// It is not recommended to use whitepoints other than [color.D50] or
+// [color.D65].
+func InXYZ(whitepoint *color.XYZ) GradientOption {
+	if whitepoint == nil {
+		whitepoint = color.D65
+	}
+
+	return func(opts *gradientOptions) {
+		opts.colorspace = &ColorspaceXYZ{whitepoint}
+	}
+}
+
 // InHSV sets gradient colorspace to HSV. The hue parameter controls how the
 // hue should transition between colors along the hue circle. See [HueType]
 // for more information.
