@@ -95,6 +95,11 @@ func InLab(whitepoint *color.XYZ) GradientOption {
 	}
 }
 
+// InOklab sets gradient colorspace to Oklab.
+func InOklab(opts *gradientOptions) {
+	opts.colorspace = &ColorspaceOklab{}
+}
+
 // finalizeOptions validates and normalizes gradient options.
 func finalizeOptions(opts *gradientOptions) error {
 	if len(opts.stops) < 2 {
