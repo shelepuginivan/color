@@ -16,6 +16,7 @@ type Oklab struct {
 	B float64 // B represents the yellow-blue component of the color.
 }
 
+// NewOklab returns a new instance of [Oklab].
 func NewOklab(l, a, b float64) *Oklab {
 	return &Oklab{l, a, b}
 }
