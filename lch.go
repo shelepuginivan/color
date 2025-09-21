@@ -59,6 +59,12 @@ func (c Lch) Lch() *Lch {
 	return &c
 }
 
+// Oklab returns [Oklab] representation of color (lightness, red-green,
+// yellow-blue).
+func (c Lch) Oklab() *Oklab {
+	return c.XYZ().Oklab()
+}
+
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c Lch) RGB() *RGB {
 	return c.Lab().RGB()

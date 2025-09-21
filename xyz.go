@@ -134,6 +134,39 @@ func (c XYZ) LabWithWhitepoint(white *XYZ) *Lab {
 	return &Lab{l, a, b}
 }
 
+// Oklab returns [Oklab] representation of color (lightness, red-green,
+// yellow-blue).
+func (c XYZ) Oklab() *Oklab {
+	// SEE: https://bottosson.github.io/posts/oklab/
+
+	// Convert XYZ to LMS colorspace.
+	var (
+		l = 0.8189330101*c.X + 0.3618667424*c.Y - 0.1288597137*c.Z
+		m = 0.0329845436*c.X + 0.9293118715*c.Y + 0.0361456387*c.Z
+		s = 0.0482003018*c.X + 0.2643662691*c.Y + 0.6338517070*c.Z
+	)
+
+	// Apply cube root non-linearity.
+	var (
+		l_ = math.Pow(l, 1.0/3.0)
+		m_ = math.Pow(m, 1.0/3.0)
+		s_ = math.Pow(s, 1.0/3.0)
+	)
+
+	// Convert to Oklab.
+	var (
+		rL = 0.2104542553*l_ + 0.7936177850*m_ - 0.0040720468*s_
+		rA = 1.9779984951*l_ - 2.4285922050*m_ + 0.4505937099*s_
+		rB = 0.0259040371*l_ + 0.7827717662*m_ - 0.8086757660*s_
+	)
+
+	return &Oklab{
+		L: rL,
+		A: rA,
+		B: rB,
+	}
+}
+
 // XYZ returns the color unchanged. This method is required to implement the
 // [Color] interface.
 func (c XYZ) XYZ() *XYZ {

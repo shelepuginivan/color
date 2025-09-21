@@ -176,6 +176,12 @@ func (c RGB) Lch() *Lch {
 	return c.XYZ().Lab().Lch()
 }
 
+// Oklab returns [Oklab] representation of color (lightness, red-green,
+// yellow-blue).
+func (c RGB) Oklab() *Oklab {
+	return c.XYZ().Oklab()
+}
+
 // RGB returns the color unchanged. This method is required to implement the
 // [Color] interface.
 func (c RGB) RGB() *RGB {

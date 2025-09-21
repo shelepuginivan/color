@@ -11,6 +11,7 @@ type Color interface {
 	HSV() *HSV
 	Lab() *Lab
 	Lch() *Lch
+	Oklab() *Oklab
 	RGB() *RGB
 	XYZ() *XYZ
 	String() string
