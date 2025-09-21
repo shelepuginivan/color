@@ -8,7 +8,7 @@ import (
 )
 
 type ColorspaceHSV struct {
-	hueType HueType
+	method HueInterpolationMethod
 }
 
 func (cHSV *ColorspaceHSV) Colors(stops []*ColorStop, steps int) []color.Color {
@@ -41,7 +41,7 @@ func (cHSV *ColorspaceHSV) Intermediate(start, end color.Color, steps int) []col
 		e = end.HSV()
 	)
 
-	direction, angle := interpolate.Hue(s.H, e.H, interpolate.HueInterpolationMethod(cHSV.hueType))
+	direction, angle := interpolate.Hue(s.H, e.H, interpolate.HueInterpolationMethod(cHSV.method))
 
 	currentHue := float64(s.H)
 	dHue := float64(direction) * float64(angle) / float64(steps-1)

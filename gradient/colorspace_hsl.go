@@ -8,7 +8,7 @@ import (
 )
 
 type ColorspaceHSL struct {
-	hueType HueType
+	method HueInterpolationMethod
 }
 
 func (cHSL *ColorspaceHSL) Colors(stops []*ColorStop, steps int) []color.Color {
@@ -41,7 +41,7 @@ func (cHSL *ColorspaceHSL) Intermediate(start, end color.Color, steps int) []col
 		e = end.HSL()
 	)
 
-	direction, angle := interpolate.Hue(s.H, e.H, interpolate.HueInterpolationMethod(cHSL.hueType))
+	direction, angle := interpolate.Hue(s.H, e.H, interpolate.HueInterpolationMethod(cHSL.method))
 	currentHue := float64(s.H)
 	dHue := float64(direction) * float64(angle) / float64(steps-1)
 

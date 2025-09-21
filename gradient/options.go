@@ -7,14 +7,14 @@ import (
 	"github.com/shelepuginivan/color"
 )
 
-// HueType represents how the hue should transition between colors along the
-// hue circle. Used for gradients in cylindrical color spaces
-type HueType uint8
+// HueInterpolationMethod represents how the hue should transition between
+// colors along the hue circle. Used for gradients in cylindrical color spaces.
+type HueInterpolationMethod uint8
 
 const (
 	// Follow the shortest path on the hue circle between colors
 	// (minimal angle difference).
-	ShorterHue HueType = iota
+	ShorterHue HueInterpolationMethod = iota
 
 	// Follow the longer path on the hue circle between colors
 	// (maximal angle difference).
@@ -53,12 +53,21 @@ func InRGB(opts *gradientOptions) {
 	opts.colorspace = &ColorspaceRGB{}
 }
 
-// InHSL sets gradient colorspace to HSL. The hue parameter controls how the
-// hue should transition between colors along the hue circle. See [HueType]
-// for more information.
-func InHSL(hue HueType) GradientOption {
+// InHSL sets gradient colorspace to HSL. The method parameter controls how the
+// hue should transition between colors along the hue circle.
+// See [HueInterpolationMethod] for more information.
+func InHSL(method HueInterpolationMethod) GradientOption {
 	return func(opts *gradientOptions) {
-		opts.colorspace = &ColorspaceHSL{hue}
+		opts.colorspace = &ColorspaceHSL{method}
+	}
+}
+
+// InHSV sets gradient colorspace to HSV. The method parameter controls how the
+// hue should transition between colors along the hue circle.
+// See [HueInterpolationMethod] for more information.
+func InHSV(method HueInterpolationMethod) GradientOption {
+	return func(opts *gradientOptions) {
+		opts.colorspace = &ColorspaceHSV{method}
 	}
 }
 
@@ -83,15 +92,6 @@ func InLab(whitepoint *color.XYZ) GradientOption {
 
 	return func(opts *gradientOptions) {
 		opts.colorspace = &ColorspaceLab{whitepoint}
-	}
-}
-
-// InHSV sets gradient colorspace to HSV. The hue parameter controls how the
-// hue should transition between colors along the hue circle. See [HueType]
-// for more information.
-func InHSV(hue HueType) GradientOption {
-	return func(opts *gradientOptions) {
-		opts.colorspace = &ColorspaceHSV{hue}
 	}
 }
 
