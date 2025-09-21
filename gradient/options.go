@@ -60,6 +60,15 @@ func InHSL(hue HueType) GradientOption {
 	}
 }
 
+// InHSV sets gradient colorspace to HSV. The hue parameter controls how the
+// hue should transition between colors along the hue circle. See [HueType]
+// for more information.
+func InHSV(hue HueType) GradientOption {
+	return func(opts *gradientOptions) {
+		opts.colorspace = &ColorspaceHSV{hue}
+	}
+}
+
 // finalizeOptions validates and normalizes gradient options.
 func finalizeOptions(opts *gradientOptions) error {
 	if len(opts.stops) < 2 {
