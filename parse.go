@@ -215,32 +215,32 @@ func ParseHex(hex string) (Color, error) {
 		i++
 	}
 
-	var hex_r, hex_g, hex_b string
+	var hexR, hexG, hexB string
 
 	switch len(hex) - i {
 	case 3: // Short hexadecimal notation, e.g. `#abc`.
-		hex_r = string([]byte{hex[i], hex[i]})
-		hex_g = string([]byte{hex[i+1], hex[i+1]})
-		hex_b = string([]byte{hex[i+2], hex[i+2]})
+		hexR = string([]byte{hex[i], hex[i]})
+		hexG = string([]byte{hex[i+1], hex[i+1]})
+		hexB = string([]byte{hex[i+2], hex[i+2]})
 	case 6: // Long hexadecimal notation, e.g. `#aabbcc`
-		hex_r = hex[i : i+2]
-		hex_g = hex[i+2 : i+4]
-		hex_b = hex[i+4 : i+6]
+		hexR = hex[i : i+2]
+		hexG = hex[i+2 : i+4]
+		hexB = hex[i+4 : i+6]
 	default:
 		return nil, fmt.Errorf("invalid hexadecimal string")
 	}
 
-	r, err := strconv.ParseUint(hex_r, 16, 64)
+	r, err := strconv.ParseUint(hexR, 16, 64)
 	if err != nil {
 		return nil, fmt.Errorf("invalid value of red channel: %v", err)
 	}
 
-	g, err := strconv.ParseUint(hex_g, 16, 64)
+	g, err := strconv.ParseUint(hexG, 16, 64)
 	if err != nil {
 		return nil, fmt.Errorf("invalid value of green channel: %v", err)
 	}
 
-	b, err := strconv.ParseUint(hex_b, 16, 64)
+	b, err := strconv.ParseUint(hexB, 16, 64)
 	if err != nil {
 		return nil, fmt.Errorf("invalid value of blue channel: %v", err)
 	}
