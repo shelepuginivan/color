@@ -19,11 +19,16 @@ func srgbToLinear(c float64) float64 {
 //
 // [WCAG 2.2]: https://www.w3.org/TR/WCAG/#dfn-relative-luminance
 func linearToSRGB(c float64) float64 {
+	var v float64
+
 	if c <= 0.0031308 {
-		return c * 12.92
+		v = c * 12.92
+	} else {
+		v = 1.055*math.Pow(c, 1.0/2.4) - 0.055
 	}
 
-	return 1.055*math.Pow(c, 1.0/2.4) - 0.055
+	// Clamp the values to sRGB gamut.
+	return math.Max(0, math.Min(1, v))
 }
 
 // xyzValToLabF converts [XYZ] value X, Y, and Z to [Lab] f_x, f_y, and f_z
