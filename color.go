@@ -1,3 +1,5 @@
+// Package color implements common color math functions and provides color
+// manipulation capabilities.
 package color
 
 // Color is a common interface for all package structures. It is used for
