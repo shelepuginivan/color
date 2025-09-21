@@ -36,17 +36,17 @@ func (cRGB *ColorspaceRGB) Intermediate(start, end color.Color, steps int) []col
 	)
 
 	for i := range steps {
-		scale := float64(i) / float64(steps)
+		scale := float64(i) / float64(steps-1)
 
 		r := float64(s.R)*(1-scale) + float64(e.R)*scale
 		g := float64(s.G)*(1-scale) + float64(e.G)*scale
 		b := float64(s.B)*(1-scale) + float64(e.B)*scale
 
-		colors = append(colors, &color.RGB{
+		colors[i] = &color.RGB{
 			R: uint8(r),
 			G: uint8(g),
 			B: uint8(b),
-		})
+		}
 	}
 
 	return colors

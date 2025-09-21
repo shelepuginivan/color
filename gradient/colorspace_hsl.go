@@ -59,10 +59,10 @@ func (cHSL *ColorspaceHSL) Intermediate(start, end color.Color, steps int) []col
 	}
 
 	currentHue := float64(s.H)
-	dHue := float64(direction) * float64(angle) / float64(steps)
+	dHue := float64(direction) * float64(angle) / float64(steps-1)
 
 	for i := range steps {
-		scale := float64(i) / float64(steps)
+		scale := float64(i) / float64(steps-1)
 
 		hue := math.Round(currentHue)
 		saturation := float64(s.S)*(1-scale) + float64(e.S)*scale
