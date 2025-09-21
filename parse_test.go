@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/shelepuginivan/color"
-
 	"github.com/stretchr/testify/assert"
 )
 
@@ -143,6 +142,18 @@ func TestParseFunc(t *testing.T) {
 		{"lch(again invalid args)", nil, true},
 		{"lch(3.141592654 2.718281828)", nil, true},
 		{"lch(0 0 0 0)", nil, true},
+
+		{"oklab(0.51634019, 0.15469500, 0.06289579)", &color.Oklab{0.51634019, 0.15469500, 0.06289579}, false},
+		{"oklab(0.20654008 0.12197225 0.05136952)", &color.Oklab{0.20654008, 0.12197225, 0.05136952}, false},
+		{"oklab(0.3842619, none, 18.88683%)", &color.Oklab{0.3842619, 0, 0.1888683}, false},
+		{"oklab(yet another case)", nil, true},
+		{"oklab(1 2 3 4)", nil, true},
+
+		{"oklch(8.991815706465342, 3.7396951758251333, 82)", &color.Oklch{8.991815706465342, 3.7396951758251333, 82}, false},
+		{"oklch(3.234 1.75672 0.1turn)", &color.Oklch{3.234, 1.75672, 36}, false},
+		{"oklch(again invalid args)", nil, true},
+		{"oklch(3.141592654 2.718281828)", nil, true},
+		{"oklch(0 0 0 0)", nil, true},
 
 		{"rgb(255 255 255)", &color.RGB{255, 255, 255}, false},
 		{"rgb(none none none)", &color.RGB{0, 0, 0}, false},

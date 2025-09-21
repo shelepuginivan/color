@@ -347,6 +347,18 @@ func ParseFunc(fnstring string) (Color, error) {
 			parsedArgs[1],
 			int(math.Round(parsedArgs[2])),
 		), nil
+	case "oklab":
+		return NewOklab(
+			parsedArgs[0],
+			parsedArgs[1],
+			parsedArgs[2],
+		), nil
+	case "oklch":
+		return NewOklch(
+			parsedArgs[0],
+			parsedArgs[1],
+			int(math.Round(parsedArgs[2])),
+		), nil
 	case "rgb":
 		return NewRGB(
 			uint8(math.Round(parsedArgs[0])),
