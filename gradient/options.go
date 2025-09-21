@@ -116,6 +116,15 @@ func InOklab(opts *gradientOptions) {
 	opts.colorspace = &ColorspaceOklab{}
 }
 
+// InOklch sets gradient colorspace to Oklch, a cylindrical counterpart of Oklab.
+// The method parameter controls how the hue should transition between colors
+// along the hue circle. See [HueInterpolationMethod] for more information.
+func InOklch(method HueInterpolationMethod) GradientOption {
+	return func(opts *gradientOptions) {
+		opts.colorspace = &ColorspaceOklch{method}
+	}
+}
+
 // finalizeOptions validates and normalizes gradient options.
 func finalizeOptions(opts *gradientOptions) error {
 	if len(opts.stops) < 2 {
