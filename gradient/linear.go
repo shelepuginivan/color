@@ -1,34 +1,56 @@
 package gradient
 
-import "github.com/shelepuginivan/color"
+import (
+	"math"
+
+	"github.com/shelepuginivan/color"
+)
 
 type LinearGradient struct {
-	start color.Color
-	end   color.Color
+	stops []*ColorStop
 }
 
-func NewLinear(start, end color.Color) *LinearGradient {
-	return &LinearGradient{start, end}
+func NewLinear(options ...GradientOption) (*LinearGradient, error) {
+	opts := &gradientOptions{}
+
+	for _, opt := range options {
+		opt(opts)
+	}
+
+	if err := finalizeOptions(opts); err != nil {
+		return nil, err
+	}
+
+	return &LinearGradient{
+		stops: opts.stops,
+	}, nil
 }
 
 func (lg *LinearGradient) Colors(steps int) []color.Color {
-	var (
-		colors = make([]color.Color, steps)
-		start  = lg.start.RGB()
-		end    = lg.end.RGB()
-	)
+	colors := make([]color.Color, 0, steps)
 
-	for i := range steps {
-		scale := float64(i) / float64(steps)
+	for stopIndex := range len(lg.stops) - 1 {
+		first := lg.stops[stopIndex]
+		second := lg.stops[stopIndex+1]
 
-		r := float64(start.R)*(1-scale) + float64(end.R)*scale
-		g := float64(start.G)*(1-scale) + float64(end.G)*scale
-		b := float64(start.B)*(1-scale) + float64(end.B)*scale
+		stepFraction := second.Position - first.Position
+		segmentSteps := int(math.Round(float64(steps) * stepFraction))
 
-		colors[i] = &color.RGB{
-			R: uint8(r),
-			G: uint8(g),
-			B: uint8(b),
+		start := first.Color.RGB()
+		end := second.Color.RGB()
+
+		for i := range segmentSteps {
+			scale := float64(i) / float64(segmentSteps)
+
+			r := float64(start.R)*(1-scale) + float64(end.R)*scale
+			g := float64(start.G)*(1-scale) + float64(end.G)*scale
+			b := float64(start.B)*(1-scale) + float64(end.B)*scale
+
+			colors = append(colors, &color.RGB{
+				R: uint8(r),
+				G: uint8(g),
+				B: uint8(b),
+			})
 		}
 	}
 
