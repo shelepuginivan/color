@@ -8,7 +8,8 @@ import (
 )
 
 type gradientOptions struct {
-	stops []*ColorStop
+	stops      []*ColorStop
+	colorspace Colorspace
 }
 
 // GradientOption is a functional options type for configuring [Gradient].
@@ -21,6 +22,11 @@ func WithColorStop(color color.Color, position float64) GradientOption {
 	return func(opts *gradientOptions) {
 		opts.stops = append(opts.stops, &ColorStop{color, position})
 	}
+}
+
+// InRGB sets gradient colorspace to RGB.
+func InRGB(opts *gradientOptions) {
+	opts.colorspace = &ColorspaceRGB{}
 }
 
 // finalizeOptions validates and normalizes gradient options.
@@ -42,6 +48,11 @@ func finalizeOptions(opts *gradientOptions) error {
 	// Fill color stop at the gradient end if it is missing.
 	if last := opts.stops[len(opts.stops)-1]; last.Position < 1 {
 		opts.stops = append(opts.stops, &ColorStop{last.Color, 1})
+	}
+
+	// The default colorspace is RGB.
+	if opts.colorspace == nil {
+		opts.colorspace = &ColorspaceRGB{}
 	}
 
 	return nil
