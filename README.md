@@ -39,7 +39,7 @@ func main() {
 
 - Consistent chainable API
 - Parsing from CSS-like color functions
-- Color convertion and mixing
+- Color conversion and mixing
 - Lightness and contrast calculation
 - Color wheel functions
 
