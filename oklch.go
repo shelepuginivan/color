@@ -17,6 +17,11 @@ type Oklch struct {
 	H int     // H represents angle of the hue in the Oklab color wheel (in degrees).
 }
 
+// NewOklch returns a new instance of [Oklch].
+func NewOklch(l, c float64, h int) *Oklch {
+	return &Oklch{l, c, h}
+}
+
 // CMYK returns [CMYK] representation of color (cyan, magenta, yellow, key).
 func (c Oklch) CMYK() *CMYK {
 	return c.Oklab().CMYK()
