@@ -30,8 +30,13 @@ const (
 	DecreasingHue
 )
 
+type point struct {
+	x, y int
+}
+
 type gradientOptions struct {
 	stops      []*ColorStop
+	center     *point
 	angle      int
 	colorspace Colorspace
 }
@@ -50,9 +55,22 @@ func WithColorStop(color color.Color, position float64) GradientOption {
 	}
 }
 
+// WithAngle sets gradient angle.
+//
+// - For [ConicGradient], rotates the baseline clockwise.
+// - For [LinearGradient], specifies angle of direction.
 func WithAngle(angle int) GradientOption {
 	return func(opts *gradientOptions) {
 		opts.angle = degrees.Normalize(angle)
+	}
+}
+
+// WithCenter sets gradient center point.
+//
+// - For [ConicGradient], sets the rotation axis point.
+func WithCenter(x, y int) GradientOption {
+	return func(opts *gradientOptions) {
+		opts.center = &point{x, y}
 	}
 }
 
