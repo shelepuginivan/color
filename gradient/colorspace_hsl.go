@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/shelepuginivan/color"
+	"github.com/shelepuginivan/color/internal/interpolate"
 )
 
 type ColorspaceHSL struct {
@@ -64,14 +65,14 @@ func (cHSL *ColorspaceHSL) Intermediate(start, end color.Color, steps int) []col
 	for i := range steps {
 		scale := float64(i) / float64(steps-1)
 
-		hue := math.Round(currentHue)
-		saturation := float64(s.S)*(1-scale) + float64(e.S)*scale
-		lightness := float64(s.L)*(1-scale) + float64(e.L)*scale
+		hue := int(math.Round(currentHue))
+		saturation := interpolate.RectangularInt(s.S, e.S, scale)
+		lightness := interpolate.RectangularInt(s.L, e.L, scale)
 
 		colors[i] = &color.HSL{
-			H: int(hue),
-			S: int(saturation),
-			L: int(lightness),
+			H: hue,
+			S: saturation,
+			L: lightness,
 		}
 
 		currentHue = math.Mod(currentHue+dHue, 360)

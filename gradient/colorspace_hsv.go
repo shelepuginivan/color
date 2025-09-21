@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/shelepuginivan/color"
+	"github.com/shelepuginivan/color/internal/interpolate"
 )
 
 type ColorspaceHSV struct {
@@ -64,14 +65,14 @@ func (cHSV *ColorspaceHSV) Intermediate(start, end color.Color, steps int) []col
 	for i := range steps {
 		scale := float64(i) / float64(steps-1)
 
-		hue := math.Round(currentHue)
-		saturation := float64(s.S)*(1-scale) + float64(e.S)*scale
-		value := float64(s.V)*(1-scale) + float64(e.V)*scale
+		hue := int(math.Round(currentHue))
+		saturation := interpolate.RectangularInt(s.S, e.S, scale)
+		value := interpolate.RectangularInt(s.V, e.V, scale)
 
 		colors[i] = &color.HSV{
-			H: int(hue),
-			S: int(saturation),
-			V: int(value),
+			H: hue,
+			S: saturation,
+			V: value,
 		}
 
 		currentHue = math.Mod(currentHue+dHue, 360)

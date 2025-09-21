@@ -9,6 +9,12 @@ func Rectangular(v1, v2, t float64) float64 {
 	return v1*(1-t) + v2*t
 }
 
+// RectangularInt performs interpolation in rectangular colorspace on int
+// values.
+func RectangularInt(v1, v2 int, t float64) int {
+	return int(math.Round(Rectangular(float64(v1), float64(v2), t)))
+}
+
 // RectangularUint8 performs interpolation in rectangular colorspace on uint8
 // values.
 func RectangularUint8(v1, v2 uint8, t float64) uint8 {
