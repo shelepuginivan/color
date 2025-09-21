@@ -46,7 +46,7 @@ func main() {
 ## Installation
 
 ```shell
-go get github.com/shelepuginivan/fsutil
+go get github.com/shelepuginivan/color
 ```
 
 ## Documentation
