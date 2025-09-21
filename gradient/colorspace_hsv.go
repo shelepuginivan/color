@@ -39,25 +39,9 @@ func (cHSV *ColorspaceHSV) Intermediate(start, end color.Color, steps int) []col
 
 		s = start.HSV()
 		e = end.HSV()
-
-		// Direction of the hue transition.
-		// 1 for clockwise, -1 for counter-clockwise.
-		direction int
-
-		// Hue difference angle.
-		angle int
 	)
 
-	switch cHSV.hueType {
-	case ShorterHue:
-		direction, angle = cHSV.calcShorterHue(s, e)
-	case LongerHue:
-		direction, angle = cHSV.calcLongerHue(s, e)
-	case IncreasingHue:
-		direction, angle = cHSV.calcIncreasingHue(s, e)
-	case DecreasingHue:
-		direction, angle = cHSV.calcDecreasingHue(s, e)
-	}
+	direction, angle := interpolate.Hue(s.H, e.H, interpolate.HueInterpolationMethod(cHSV.hueType))
 
 	currentHue := float64(s.H)
 	dHue := float64(direction) * float64(angle) / float64(steps-1)
@@ -79,44 +63,4 @@ func (cHSV *ColorspaceHSV) Intermediate(start, end color.Color, steps int) []col
 	}
 
 	return colors
-}
-
-func (cHSV *ColorspaceHSV) calcShorterHue(start, end *color.HSV) (direction int, angle int) {
-	diff := (end.H - start.H + 360) % 360
-
-	if diff <= 180 {
-		direction = 1
-		angle = diff
-	} else {
-		direction = -1
-		angle = 360 - diff
-	}
-
-	return
-}
-
-func (cHSV *ColorspaceHSV) calcLongerHue(start, end *color.HSV) (direction int, angle int) {
-	diff := (end.H - start.H + 360) % 360
-
-	if diff <= 180 {
-		direction = -1
-		angle = 360 - diff
-	} else {
-		direction = 1
-		angle = diff
-	}
-
-	return
-}
-
-func (cHSV *ColorspaceHSV) calcIncreasingHue(start, end *color.HSV) (direction int, angle int) {
-	direction = 1
-	angle = (end.H - start.H + 360) % 360
-	return
-}
-
-func (cHSV *ColorspaceHSV) calcDecreasingHue(start, end *color.HSV) (direction int, angle int) {
-	direction = -1
-	angle = (start.H - end.H + 360) % 360
-	return
 }
