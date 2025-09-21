@@ -100,6 +100,11 @@ func (c CMYK) Oklab() *Oklab {
 	return c.XYZ().Oklab()
 }
 
+// Oklch returns [Oklch] representation of color (lightness, chroma, hue).
+func (c CMYK) Oklch() *Oklch {
+	return c.XYZ().Oklab().Oklch()
+}
+
 // Edit allows in-place modification of the [CMYK] color instance using the
 // provided editing function.
 //

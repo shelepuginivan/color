@@ -12,6 +12,7 @@ type Color interface {
 	Lab() *Lab
 	Lch() *Lch
 	Oklab() *Oklab
+	Oklch() *Oklch
 	RGB() *RGB
 	XYZ() *XYZ
 	String() string

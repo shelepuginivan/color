@@ -3,6 +3,8 @@ package color
 import (
 	"fmt"
 	"math"
+
+	"github.com/shelepuginivan/color/internal/degrees"
 )
 
 // Oklab represents a color in [Oklab] colorspace.
@@ -55,6 +57,15 @@ func (c Oklab) Oklab() *Oklab {
 	return &c
 }
 
+// Oklch returns [Oklch] representation of color (lightness, chroma, hue).
+func (c Oklab) Oklch() *Oklch {
+	return &Oklch{
+		L: c.L,
+		C: math.Sqrt(c.A*c.A + c.B*c.B),
+		H: degrees.FromRadians(math.Atan2(c.B, c.A)),
+	}
+}
+
 // RGB returns [RGB] representation of color (red, green, blue).
 func (c Oklab) RGB() *RGB {
 	return c.XYZ().RGB()
@@ -96,7 +107,7 @@ func (c *Oklab) Edit(editfn func(*Oklab)) *Oklab {
 	return c
 }
 
-// String returns string representation of [Oklab].
+// String returns string representation of [Oklab]
 func (c Oklab) String() string {
 	return fmt.Sprintf("oklab(%.4f, %.4f, %.4f)", c.L, c.A, c.B)
 }

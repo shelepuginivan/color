@@ -167,6 +167,11 @@ func (c XYZ) Oklab() *Oklab {
 	}
 }
 
+// Oklch returns [Oklch] representation of color (lightness, chroma, hue).
+func (c XYZ) Oklch() *Oklch {
+	return c.XYZ().Oklab().Oklch()
+}
+
 // XYZ returns the color unchanged. This method is required to implement the
 // [Color] interface.
 func (c XYZ) XYZ() *XYZ {

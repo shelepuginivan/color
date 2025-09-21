@@ -146,6 +146,11 @@ func (c HSV) Oklab() *Oklab {
 	return c.XYZ().Oklab()
 }
 
+// Oklch returns [Oklch] representation of color (lightness, chroma, hue).
+func (c HSV) Oklch() *Oklch {
+	return c.XYZ().Oklab().Oklch()
+}
+
 // Edit allows in-place modification of the [HSV] color instance using the
 // provided editing function.
 //

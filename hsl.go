@@ -135,6 +135,11 @@ func (c HSL) Oklab() *Oklab {
 	return c.XYZ().Oklab()
 }
 
+// Oklch returns [Oklch] representation of color (lightness, chroma, hue).
+func (c HSL) Oklch() *Oklch {
+	return c.XYZ().Oklab().Oklch()
+}
+
 // Edit allows in-place modification of the [HSL] color instance using the
 // provided editing function.
 //
