@@ -42,6 +42,7 @@ func main() {
 - Color conversion and mixing
 - Lightness and contrast calculation
 - Color wheel functions
+- [Gradients](./gradient)
 
 ## Installation
 
