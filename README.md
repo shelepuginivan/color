@@ -53,3 +53,7 @@ go get github.com/shelepuginivan/color
 ## Documentation
 
 Is available on [pkg.go.dev](https://pkg.go.dev/github.com/shelepuginivan/color).
+
+## License
+
+[MIT](./LICENSE.md)
