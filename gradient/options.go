@@ -65,10 +65,12 @@ func WithColorStop(color color.Color, position float64) GradientOption {
 	}
 }
 
-// WithAngle sets gradient angle.
+// WithAngle sets gradient angle in degrees.
 //
-// - For [ConicGradient], sets baseline angle.
-// - For [LinearGradient], specifies angle of direction.
+// Angles are measured with 0° at the top, increasing clockwise.
+//
+//   - For [ConicGradient], sets starting angle of rotation.
+//   - For [LinearGradient], specifies angle of gradient line.
 func WithAngle(angle int) GradientOption {
 	angle = degrees.Normalize(angle)
 
@@ -81,8 +83,10 @@ func WithAngle(angle int) GradientOption {
 
 // WithDirection specifies direction of the gradient.
 //
-// - For [ConicGradient], sets baseline angle depending on image.
-// - For [LinearGradient], sets direction of color transition.
+//   - For [ConicGradient], sets starting angle of rotation depending on image
+//     geometry.
+//   - For [LinearGradient], sets direction of color transition depending on
+//     image geometry.
 func WithDirection(direction Direction) GradientOption {
 	return func(opts *gradientOptions) {
 		opts.angle = angleSpec{
@@ -93,8 +97,8 @@ func WithDirection(direction Direction) GradientOption {
 
 // WithCenterAt sets gradient center point as an absolute position.
 //
-// - For [ConicGradient], sets the rotation axis point.
-// - For [DiamondGradient] and [RadialGradient], sets starting point.
+//   - For [ConicGradient], sets the rotation axis point.
+//   - For [DiamondGradient] and [RadialGradient], sets starting point.
 func WithCenterAt(x, y int) GradientOption {
 	return func(opts *gradientOptions) {
 		opts.center = pointSpec{
@@ -106,8 +110,8 @@ func WithCenterAt(x, y int) GradientOption {
 
 // WithRelativeCenter sets gradient center point relative to the image.
 //
-// - For [ConicGradient], sets the rotation axis point.
-// - For [DiamondGradient] and [RadialGradient], sets starting point.
+//   - For [ConicGradient], sets the rotation axis point.
+//   - For [DiamondGradient] and [RadialGradient], sets starting point.
 func WithRelativeCenter(x, y float64) GradientOption {
 	return func(opts *gradientOptions) {
 		opts.center = pointSpec{

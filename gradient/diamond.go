@@ -9,12 +9,19 @@ import (
 	"github.com/shelepuginivan/color/internal/integers"
 )
 
+// DiamondGradient is a gradient with a progressive color transition radiating
+// from the center point in diamond shapes.
 type DiamondGradient struct {
 	stops      []*ColorStop
 	center     pointSpec
 	colorspace Colorspace
 }
 
+// NewDiamond returns a new instance of [DiamondGradient].
+//
+// Supported options are:
+//   - [WithCenterAt] and [WithRelativeCenter] set the center point of the
+//     gradient.
 func NewDiamond(options ...GradientOption) (*DiamondGradient, error) {
 	opts := &gradientOptions{}
 

@@ -8,12 +8,19 @@ import (
 	"github.com/shelepuginivan/color"
 )
 
+// RadialGradient is a gradient with a progressive color transition radiating
+// from the center point in circular shapes.
 type RadialGradient struct {
 	stops      []*ColorStop
 	center     pointSpec
 	colorspace Colorspace
 }
 
+// NewRadial returns a new instance of [RadialGradient].
+//
+// Supported options are:
+//   - [WithCenterAt] and [WithRelativeCenter] set the center point of the
+//     gradient.
 func NewRadial(options ...GradientOption) (*RadialGradient, error) {
 	opts := &gradientOptions{}
 

@@ -9,12 +9,19 @@ import (
 	"github.com/shelepuginivan/color"
 )
 
+// LinearGradient is a gradient with a progressive color transition along a
+// straight line.
 type LinearGradient struct {
 	stops      []*ColorStop
 	colorspace Colorspace
 	angle      angleSpec
 }
 
+// NewLinear returns a new instance of [LinearGradient].
+//
+// Supported options are:
+//   - [WithAngle] and [WithDirection] set the angle of gradient line.
+//     The default angle is 0° (gradient progresses from bottom to top).
 func NewLinear(options ...GradientOption) (*LinearGradient, error) {
 	opts := &gradientOptions{}
 

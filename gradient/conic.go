@@ -9,6 +9,8 @@ import (
 	"github.com/shelepuginivan/color"
 )
 
+// ConicGradient is a gradient with a progressive color transition rotating
+// around the center.
 type ConicGradient struct {
 	stops      []*ColorStop
 	angle      angleSpec
@@ -16,6 +18,12 @@ type ConicGradient struct {
 	colorspace Colorspace
 }
 
+// NewConic returns a new instance of [ConicGradient].
+//
+// Supported options are:
+//   - [WithCenterAt] and [WithRelativeCenter] set the rotation axis point.
+//   - [WithAngle] and [WithDirection] set the starting angle of rotation.
+//     The default angle is 0° (rotation starts at the top).
 func NewConic(options ...GradientOption) (*ConicGradient, error) {
 	opts := &gradientOptions{}
 
